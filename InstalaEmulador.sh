@@ -37,11 +37,6 @@ fi
 # Opciones de configuración
 ####################################################################
 
-cores=$(dialog --title "DATOS DE CONEXIÓN" \
---backtitle $backtitle \
---nocancel \
---inputbox "\nNº de cores que tienes en tu PC: \nValor por defecto 1" 10 51 1 2>&1 >/dev/tty)
-
 auth=$(dialog --title "DATOS DE CONEXIÓN" \
 --backtitle $backtitle \
 --nocancel \
@@ -328,7 +323,7 @@ elif [ "$opcion0" = "4 - Trinitycore versión 3.3.5a (12340)" ]; then
 		fi
 		cd $repos/TrinityCore/build  && clear
 		cmake ../ -DCMAKE_INSTALL_PREFIX=$server_tricore -DTOOLS=0
-		make -j$cores && make install
+		make -j $(nproc) install
 		cp $HOME/Repos/TDB-335/$arch_sql_db_tc335 $server_tricore/bin
 		dialog --title "INFORMACIÓN" \
 		--backtitle $backtitle \
