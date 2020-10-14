@@ -82,18 +82,6 @@ server_tricore=$HOME/Servers/TrinityCore
 link_data335=https://arxius.tronosdesangre.es/index.php/s/YJWw6m9EWF52mAe
 
 
-#wotlk_com_es=$HOME/Repos/esWoW2-WoTLK-es/TrinityCore/Comunes/
-#wotlk_es=$HOME/Repos/esWoW2-WoTLK-es/TrinityCore/TDB
-#db_tdb=$HOME/Repos/TDB-335
-#db_act_tri=$HOME/Repos/TrinityCore/sql/updates/world
-#sqlchar_tri=$HOME/Repos/TrinityCore/sql/base
-#sqlauth_tri=$HOME/Repos/TrinityCore/sql/base
-#core_tri=$HOME/Repos/TrinityCore
-#server_tricore=$HOME/server_tricore
-#back_tri=$HOME/server_tricore/Backups
-#rep_tdb=git://github.com/tortosi/TDB-335.git
-#rep_wotlk_es=git://github.com/tortosi/esWoW2-WoTLK-es.git
-
 #####################################################################################################
 # Menú de emuladores disponibles
 #####################################################################################################
@@ -207,13 +195,6 @@ _EOF_
 	--backtitle "https://catlinux.es" \
 	--nocancel \
 	--msgbox "\nProcedemos a las librerias ACE y TBB." 12 70
-#	clear && cd $HOME/ && wget http://download.dre.vanderbilt.edu/previous_versions/ACE-6.5.0.tar.gz && tar -zxvf ACE-6.5.0.tar.gz
-#	cd ACE_wrappers 
-#	export ACE_ROOT=$HOME/ACE_wrappers
-#	export LD_LIBRARY_PATH=$ACE_ROOT/lib:$LD_LIBRARY_PATH
-#	echo -e '#include "ace/config-linux.h"' > "$ACE_ROOT/ace/config.h"
-#	echo -e 'include $(ACE_ROOT)/include/makeinclude/platform_linux.GNU \nINSTALL_PREFIX = /usr/local' > "$ACE_ROOT/include/makeinclude/platform_macros.GNU"
-#	make -j$cores && sudo make install && cd $HOME/ && rm ACE-6.5.0.tar.gz && rm -Rf ACE_wrappers
 sudo apt-get install -qq libace-dev
 export ACE_ROOT=/usr/include/ace
 sudo apt-get install -y libtbb-dev
@@ -521,11 +502,6 @@ elif [ "$opcion0" = "4 - Trinitycore versión 3.3.5a (12340)" ]; then
 				--inputbox "\nDirectorio del archivo logs: \nValor por defecto logs" 10 51 logs 2>&1 >/dev/tty)
 				sed -e "s/LogsDir = \"\"/LogsDir = \"\.\.\/$conf\"/g" -i $server_tricore/etc/authserver.temp
 
-#				conf2=$(dialog --title "CONFIGURACIÓN DEL authserver.conf" \
-#				--backtitle "https://catlinux.es" \
-#				--inputbox "\nConfiguración de los colores de salida en terminal: \nValor por defecto 13 11 9 5" 10 51 "13 11 9 5" 2>&1 >/dev/tty)	
-#				sed -e "s/LogColors = \"\"/LogColors = \"$conf2\"/g" -i $server_tricore/etc/authserver.temp
-
 				conf3=$(dialog --title "CONFIGURACIÓN DEL authserver.conf" \
 				--backtitle "https://catlinux.es" \
 				--inputbox "\nUsuario de MySQL: \nValor por defecto root" 10 51 root 2>&1 >/dev/tty)
@@ -760,7 +736,6 @@ elif [ "$opcion0" = "4 - Trinitycore versión 3.3.5a (12340)" ]; then
 
 				### Configuraciones que cambiamos automáticamente:
 
-				#Motd = "Welcome to a Skyfire....
 				sed -e "s/Motd = \"Welcome to a Trinity Core server.\"/Motd = \"Bienvenido a nuestro servidor.@Esperamos que sea de tu agrado.\"/g" -i $server_tricore/etc/world.conf
 
 				#PidFile = "world.pid"  IMPRESCINDIBLE!!! NO TOCAR.  
@@ -855,5 +830,3 @@ if [ "$opcion0" = "0 - Salir de la aplicación" ]; then
 	clear
 fi
 done
-
-
