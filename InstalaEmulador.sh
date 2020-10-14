@@ -26,7 +26,7 @@ if [ ! -x /usr/bin/dialog  ];then
 	Vamos a instalarlo para poder continuar"
 	sudo apt-get install dialog
 fi
-	printf "\e[8;35;100;t"
+	printf "\e[8;35;135;t"
 	clear
 	dialog --title "INFORMACIÓN" \
 	--backtitle $backtitle \
@@ -134,9 +134,9 @@ if [ "$opcion0" = "i - Información - Guía de uso" ]; then
 ####################################################################
 	if [ "$opcion2" = "1 - Leer en pantalla" ]; then
 		clear
-		cd ~/ && wget https://github.com/downloads/tortosi/InstalaEmulador/manual
-		dialog --textbox manual.txt 40 120
-		rm ~/manual*.txt
+		cd ~/ && wget https://raw.githubusercontent.com/tortosi/InstalaEmulador/master/manual
+		dialog --textbox manual 40 135
+		rm ~/manual*
 
 
 ####################################################################
@@ -144,7 +144,7 @@ if [ "$opcion0" = "i - Información - Guía de uso" ]; then
 ####################################################################
 	elif [ "$opcion2" = "2 - Guardar como archivo" ]; then
 		clear
-		cd ~/Documentos && wget https://github.com/downloads/tortosi/InstalaEmulador/manual
+		cd ~/Documentos && wget https://raw.githubusercontent.com/tortosi/InstalaEmulador/master/manual
 		dialog --title "INFORMACIÓN" \
 		--backtitle $backtitle \
 		--msgbox "\nSe ha guardado una copia del manual en:\n$HOME/Documentos." 10 45 && clear
