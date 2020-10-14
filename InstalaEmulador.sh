@@ -134,7 +134,7 @@ if [ "$opcion0" = "i - Información - Guía de uso" ]; then
 ####################################################################
 	if [ "$opcion2" = "1 - Leer en pantalla" ]; then
 		clear
-		cd ~/ && wget https://github.com/downloads/tortosi/Instalador/manual
+		cd ~/ && wget https://github.com/downloads/tortosi/InstalaEmulador/manual
 		dialog --textbox manual.txt 40 120
 		rm ~/manual*.txt
 
@@ -144,7 +144,7 @@ if [ "$opcion0" = "i - Información - Guía de uso" ]; then
 ####################################################################
 	elif [ "$opcion2" = "2 - Guardar como archivo" ]; then
 		clear
-		cd ~/Documentos && wget https://github.com/downloads/tortosi/Instalador/manual
+		cd ~/Documentos && wget https://github.com/downloads/tortosi/InstalaEmulador/manual
 		dialog --title "INFORMACIÓN" \
 		--backtitle $backtitle \
 		--msgbox "\nSe ha guardado una copia del manual en:\n$HOME/Documentos." 10 45 && clear
