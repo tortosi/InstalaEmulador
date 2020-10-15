@@ -1,25 +1,5 @@
 #!/bin/bash
 
-####################################################################
-# VARIABLES DE RUTAS
-####################################################################
-
-conecta="--host=${host} --user=root --port=${port} --password=${pass}"
-soft="build-essential expect git git-core clang cmake make gcc g++ automake autoconf patch libmariadbclient-dev libssl-dev libbz2-dev libreadline-dev libncurses-dev libboost-all-dev mariadb-server p7zip-full default-libmysqlclient-dev libace-6.* libace-dev libtool grep binutils zlibc libc6 subversion wget tmux"
-repos=$HOME/Repos
-servers=$HOME/Servers
-repo_tc335="-b 3.3.5 git://github.com/TrinityCore/TrinityCore.git"
-db_tc335=https://github.com/TrinityCore/TrinityCore/releases/download/TDB335.20091/TDB_full_world_335.20091_2020_09_15.7z
-server_tricore=$HOME/Servers/TrinityCore
-# OBTENGO NOMBRE DE ACHIVO COMPRIMIDO DE BASE DE DATOS
-arch_comp_db_tc335=$(basename "$db_tc335")
-# OBTENGO NOMBRE DE ACHIVO SQL
-arch_sql_db_tc335=${arch_comp_db_tc335%.*}.sql
-
-backtitle="https://catlinux.es"
-link_data335=https://arxius.tronosdesangre.es/index.php/s/YJWw6m9EWF52mAe
-
-
 if [ ! -x /usr/bin/dialog  ];then
 	clear
 	echo "Parece que no tienes DIALOG instalado.
@@ -31,6 +11,25 @@ fi
 	dialog --title "INFORMACIÓN" \
 	--backtitle $backtitle \
 	--msgbox "\nEstos datos son necesarios para la conexión a la base de datos o para poder compilar sin problemas. \nPon valores que sean reales o de lo contrario no funcionará correctamente el script." 10 70 && clear
+
+####################################################################
+# VARIABLES 
+####################################################################
+
+
+soft="build-essential expect git git-core clang cmake make gcc g++ automake autoconf patch libmariadbclient-dev libssl-dev libbz2-dev libreadline-dev libncurses-dev libboost-all-dev mariadb-server p7zip-full default-libmysqlclient-dev libace-6.* libace-dev libtool grep binutils zlibc libc6 subversion wget tmux"
+repos=$HOME/Repos
+servers=$HOME/Servers
+repo_tc335="-b 3.3.5 git://github.com/TrinityCore/TrinityCore.git"
+db_tc335=https://github.com/TrinityCore/TrinityCore/releases/download/TDB335.20101/TDB_full_world_335.20101_2020_10_15.7z
+server_tricore=$HOME/Servers/TrinityCore
+# OBTENGO NOMBRE DE ACHIVO COMPRIMIDO DE BASE DE DATOS
+arch_comp_db_tc335=$(basename "$db_tc335")
+# OBTENGO NOMBRE DE ACHIVO SQL
+arch_sql_db_tc335=${arch_comp_db_tc335%.*}.sql
+
+backtitle="https://catlinux.es"
+link_data335=https://arxius.tronosdesangre.es/index.php/s/YJWw6m9EWF52mAe
 
 
 ####################################################################
@@ -62,10 +61,10 @@ port=$(dialog --title "DATOS DE CONEXIÓN" \
 --nocancel \
 --inputbox "\nPuerto de MySQL: \nValor por defecto 3306" 10 51 3306 2>&1 >/dev/tty)
 
-#user=$(dialog --title "DATOS DE CONEXIÓN" \
-#--backtitle $backtitle \
-#--nocancel \
-#--inputbox "\nUsuario de MySQL: \nValor por defecto root" 10 51 root 2>&1 >/dev/tty)
+user=$(dialog --title "DATOS DE CONEXIÓN" \
+--backtitle $backtitle \
+--nocancel \
+--inputbox "\nUsuario de MySQL: \nValor por defecto master" 10 51 master 2>&1 >/dev/tty)
 
 pass=$(dialog --title "DATOS DE CONEXIÓN" \
 --backtitle $backtitle \
@@ -79,6 +78,8 @@ dialog --title "INFORMACIÓN" \
 clear
 
 
+conecta="-h ${host} --port ${portReino} -u root -p ${pass}"
+
 #####################################################################################################
 # Menú de emuladores disponibles
 #####################################################################################################
@@ -88,10 +89,8 @@ dialog --title "Menú de opciones --- Creado por MSANCHO" \
 --menu "\nEmulador que deseas compilar:" 20 80 11 \
 "i - Información - Guía de uso" "" \
 "1 - Instalar programas preparación - esenciales" "" \
+"2 - Crear usuario de mysql" "" \
 "4 - Trinitycore versión 3.3.5a (12340)" "" \
-"5 - PRÓXIMAMENTE - Conexión por Telnet a nuestro servidor" "" \
-"6 - PRÓXIMAMENTE - Copias de seguridad de las Bases de Datos" "" \
-"9 - PRÓXIMAMENTE - Crea tu web de registro de cuentas" "" \
 "0 - Salir de la aplicación" "" 2> ~/var0
 	  
 opcion0=$(cat ~/var0)
@@ -202,6 +201,22 @@ export TBB_ROOT_DIR=/usr/include/tbb
 
 
 #####################################################################################################
+# Menú - Crear usuario de mysql
+#####################################################################################################
+elif [ "$opcion0" = "2 - Crear usuario de mysql" ]; then
+	dialog --title "INFORMACIÓN" \
+	--backtitle $backtitle \
+	--msgbox "\nVamos a crear tu usuario de mysql para utilizar con las bases de datos del juego. El usuario que se creará será el siguiente: \nUsuario: $user \nContraseña: $pass \n" 10 70 
+	clear
+	mysql $conecta <<_EOF_
+	CREATE USER ${user}@localhost IDENTIFIED BY '${pass}';
+	GRANT ALL PRIVILEGES ON *.* TO '${user}'@'localhost';
+	FLUSH PRIVILEGES;
+_EOF_
+	
+
+
+#####################################################################################################
 # Menú - Trinitycore versión 3.3.5a (12340)
 #####################################################################################################
 elif [ "$opcion0" = "4 - Trinitycore versión 3.3.5a (12340)" ]; then
@@ -265,7 +280,7 @@ elif [ "$opcion0" = "4 - Trinitycore versión 3.3.5a (12340)" ]; then
 				clear
 				cd $repos && git clone $repo_tc335
 			fi
-			if [ ! -x $HOME/Repos/TDB-335  ];then
+#			if [ ! -x $HOME/Repos/TDB-335  ];then
 				dialog --title "INFORMACIÓN" \
 				--backtitle $backtitle \
 				--pause "\nVamos a descargar la base de datos de TrinityCore 3.3.5." 10 50 5
@@ -273,7 +288,7 @@ elif [ "$opcion0" = "4 - Trinitycore versión 3.3.5a (12340)" ]; then
 				cd $HOME/Repos && mkdir TDB-335
 				cd TDB-335 && wget $db_tc335
 				7z e $arch_comp_db_tc335
-			fi
+#			fi
 			dialog --title "INFORMACIÓN" \
 			--backtitle $backtitle \
 			--msgbox "\nTodos los repositorios están descargados." 8 50
@@ -378,13 +393,15 @@ elif [ "$opcion0" = "4 - Trinitycore versión 3.3.5a (12340)" ]; then
 			--defaultno \
 			--yesno "\nVas a eliminar cualquier base de datos que tenga los nombres ${world}, ${auth} y ${char} creándolas de nuevo con sus estructuras predeterminadas. ¿Estás seguro?" 10 50 
 			if [ $? = 0 ]; then
-				mysql $conecta -e "CREATE DATABASE IF NOT EXISTS ${world} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;"
-				mysql $conecta -e "CREATE DATABASE IF NOT EXISTS ${char} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;"
-				mysql $conecta -e "CREATE DATABASE IF NOT EXISTS ${auth} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;"
-				mysql $conecta -e "GRANT ALL PRIVILEGES ON ${world} . * TO 'root'@'localhost' WITH GRANT OPTION;"
-				mysql $conecta -e "GRANT ALL PRIVILEGES ON ${char} . * TO 'root'@'localhost' WITH GRANT OPTION;"
-				mysql $conecta -e "GRANT ALL PRIVILEGES ON ${auth} . * TO 'root'@'localhost' WITH GRANT OPTION;"
-				mysql $conecta -e "FLUSH PRIVILEGES;"
+					mysql $conecta <<_EOF_
+					CREATE DATABASE IF NOT EXISTS ${world} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+					CREATE DATABASE IF NOT EXISTS ${char} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+					CREATE DATABASE IF NOT EXISTS ${auth} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+					GRANT ALL PRIVILEGES ON ${world} . * TO '$master'@'localhost' WITH GRANT OPTION;
+					GRANT ALL PRIVILEGES ON ${char} . * TO '$master'@'localhost' WITH GRANT OPTION;
+					GRANT ALL PRIVILEGES ON ${auth} . * TO '$master'@'localhost' WITH GRANT OPTION;
+					FLUSH PRIVILEGES;
+_EOF_
 				dialog --title "INFORMACIÓN" \
 				--backtitle $backtitle \
 				--msgbox "\nFinalizada la creación de las bases de datos ${world}, ${auth} y ${char}." 10 50
@@ -501,7 +518,7 @@ elif [ "$opcion0" = "4 - Trinitycore versión 3.3.5a (12340)" ]; then
 
 				conf3=$(dialog --title "CONFIGURACIÓN DEL authserver.conf" \
 				--backtitle $backtitle \
-				--inputbox "\nUsuario de MySQL: \nValor por defecto root" 10 51 root 2>&1 >/dev/tty)
+				--inputbox "\nUsuario de MySQL: \nValor por defecto master" 10 51 master 2>&1 >/dev/tty)
 				sed -e "s/sqluser/$conf3/g" -i $server_tricore/etc/authserver.temp
 
 				conf4=$(dialog --title "CONFIGURACIÓN DEL authserver.conf" \
@@ -551,7 +568,7 @@ elif [ "$opcion0" = "4 - Trinitycore versión 3.3.5a (12340)" ]; then
 
 				conf8=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 				--backtitle $backtitle \
-				--inputbox "\nOpción 3/42\n\nUsuario de MySQL: \nValor por defecto root" 12 51 root 2>&1 >/dev/tty)
+				--inputbox "\nOpción 3/42\n\nUsuario de MySQL: \nValor por defecto master" 12 51 master 2>&1 >/dev/tty)
 				sed -e "s/sqluser/$conf8/g" -i $server_tricore/etc/world.conf
 
 				conf9=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
@@ -811,10 +828,8 @@ dialog --title "Menú de opciones --- Creado por MSANCHO" \
 --menu "\nEmulador que deseas compilar:" 20 80 11 \
 "i - Información - Guía de uso" "" \
 "1 - Instalar programas preparación - esenciales" "" \
+"2 - Crear usuario de mysql" "" \
 "4 - Trinitycore versión 3.3.5a (12340)" "" \
-"5 - PRÓXIMAMENTE - Conexión por Telnet a nuestro servidor" "" \
-"6 - PRÓXIMAMENTE - Copias de seguridad de las Bases de Datos" "" \
-"9 - PRÓXIMAMENTE - Crea tu web de registro de cuentas" "" \
 "0 - Salir de la aplicación" "" 2> ~/var0
 	  
 opcion0=$(cat ~/var0)
