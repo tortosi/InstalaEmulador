@@ -734,7 +734,7 @@ _EOF_
 			--inputbox "\nPuerto de conexión:" 10 51 8085 2>&1 >/dev/tty)
 			sed -e "s/portReino/$conf8/g" -i $server_tricore/etc/confrealm.sql
 
-			mysql $conecta $auth < $server_tricore/etc/confrealm.sql
+			mysql -u root -p${pass} --port=${port} $auth < $server_tricore/etc/confrealm.sql
 			rm -f $server_tricore/etc/confrealm.sql
 			dialog --title "INFORMACIÓN" \
 			--backtitle $backtitle \
