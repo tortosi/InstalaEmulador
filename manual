@@ -58,30 +58,31 @@ la integridad de nuestro sistema.
 
 
 3- El siguiente paso es dar permisos de ejecución al archivo del script. El archivo podemos colocarlo donde
-queramos, ya que está escrito con las rutas enteras de los archivos y su ubicación es indiferente. 
+queramos, ya que está escrito con las rutas absolutas de los archivos y su ubicación es indiferente. 
 Supongamos que lo tenemos en el escritorio, pues abrimos la consola y vamos al escritorio escribiendo:
 "cd ~/Escritorio" (el símbolo ~ se hace con AltGr y el nº4).
-Una vez en el escritorio desde la consola tecleamos "chmod +x InstalaEmulador.sh"
+Una vez en el escritorio desde la consola tecleamos "chmod +x SetupEmulador.sh"
 
 
-4- Ahora ya podemos arrancar el script. Para ello escribimos "./InstalaEmulador.sh"
+4- Ahora ya podemos arrancar el script. Para ello escribimos "./SetupEmulador.sh"
 
 
 5- Al arrancar el script, lo primero que hace es preguntarnos los datos de nuestro servidor. Es necesario
 contestar correctamente, ya que sirve para recabar información que necesitará para procesos posteriores y
 la guarda en unas variables para cuando la necesita tirar de ella y no pedirla repetidamente. 
 Algunas preguntas son:
-- Nº de núcleos de procesador que tienes.
+
 - Nombre de la base de datos de Login para el servidor.
 - Nombre de la base de datos de characters para el servidor.
 - Nombre de la base de datos del mundo para el servidor.
-- Dirección ip de la máquina (Si ejecutan el script en el mismo servidor deben dejar localhost).
+- Dirección ip del servidor (Si ejecutan el script en el mismo servidor deben dejar localhost).
 - Puerto que utiliza MySQL.
+- Usuario de MySQL (El script lo crea si es necesario)
 - Contraseña de MySQL.
 
-La mayoría de las respuestas tal como están por defecto son correctas. Lo más recomendable es poner el número
-correcto de cores y muy importante la contraseña de MySQL, o de lo contrario no se instalarán las bases de
-datos ni se podrá realizar ninguna función sobre ellas.
+La mayoría de las respuestas tal como están por defecto pueden ser funcionales. Es muy importante el usuario y 
+la contraseña de MySQL, o de lo contrario no se instalarán las bases de datos ni se podrá 
+realizar ninguna función sobre ellas.
 
 
 6- INSTALAR PROGRAMAS PREPARACIÓIN - ESENCIALES
@@ -144,23 +145,19 @@ Próximamente.
 
 12- CONFIGURACIONES VARIAS
 
-En este apartado tenemos varias cosas a realizar, primero encontramos el configurador de la tabla realmlist
+En este apartado tenemos varias cosas a realizar. Primero nos encontramos la configuración de los archivos
+authserver.conf y worldserver.conf.
+En estos apartados lo más importante es poner correctamente los nombres que tienen las bases de datos, el
+nombre de usuario y contraseña de MySQL. Estos campos son imprescindibles para que funcione. Para el resto
+de opciones, id leyendo los enunciados y poniendo los valores que encontréis más oportunos para vuestro servidor.
+
+Luego encontramos el configurador de la tabla realmlist
 que está en nuestra base de datos de login(auth). Los campos a configurar son:
 - Nombre del reino. Es el nombre que aparecerá al momento de conectarnos
 - Ip de conexión. En este paso, si quieres solo el servidor para pruebas debes dejarlo con la ip que aparece.
 En caso de querer usarlo en Lan pondrás la Ip que tenga el servidor dentro de la lan y en caso de querer 
 hacerlo público, pondrás tu ip pública o el nombre que tengas de dominio.
 -Puerto de conexión. Este no se suele cambiar.
-
-Ahora pasamos a configurar los archivos authserver.conf y worldserver.conf
-En estos apartados lo más importante es poner correctamente los nombres que tienen las bases de datos, el
-nombre de usuario y contraseña de MySQL. Estos campos son imprescindibles para que funcione. Para el resto
-de opciones, id leyendo los enunciados y poniendo los valores que encontréis más oportunos para vuestro servidor.
-
-
-Cuando tengamos todo esto configurado, arrancaremos el emulador por primera vez, pero el servidor
-de login (authserver) nos dará un error. Es normal, no te preocupes. Debes escoger la opción:
-"Configurar tabla realmlist de la base de datos auth". Luego ya puede volver a ejecutar el servidor de login.
 
 
 Si realizáis estos pasos correctamente ya podréis arrancar vuestro servidor correctamente. 
