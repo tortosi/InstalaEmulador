@@ -221,11 +221,19 @@ _EOF_
 			--backtitle $backtitle \
 			--msgbox "\nVamos a crear tu usuario de mysql para utilizar con las bases de datos del juego. El usuario que se creará será el siguiente: \nUsuario: $user \nContraseña: $pass \n" 10 70 
 			clear
-			mysql -u root -p${pass} --port=${port}  <<_EOF_
+			test_user=`mysql -uroot -p${pass} --port=${port} -e "select User from mysql.user" | grep $user`
+    		if [ "$test_user" == "$user" ]; then
+       			dialog --title "INFORMACIÓN" \
+				--backtitle $backtitle \
+				--msgbox "\nEl usuario $user ya se creó con anterioridad en la tabla user de tus bases de datos.  \n" 10 70 
+				clear
+    		else
+       		mysql -u root -p${pass} --port=${port}  <<_EOF_
 			CREATE USER ${user}@localhost IDENTIFIED BY '${pass}';
 			GRANT ALL PRIVILEGES ON *.* TO '${user}'@'localhost';
 			FLUSH PRIVILEGES;
 _EOF_
+    		fi
 		fi	
 
 ########  CONCLUSIÓN MENÚ Preparación del sistema - Esenciales  ######## 
