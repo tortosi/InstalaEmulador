@@ -221,7 +221,7 @@ _EOF_
 			--backtitle $backtitle \
 			--msgbox "\nVamos a crear tu usuario de mysql para utilizar con las bases de datos del juego. El usuario que se creará será el siguiente: \nUsuario: $user \nContraseña: $pass \n" 10 70 
 			clear
-			mysql -u${user} -p${pass} --port=${port}  <<_EOF_
+			mysql -u root -p${pass} --port=${port}  <<_EOF_
 			CREATE USER ${user}@localhost IDENTIFIED BY '${pass}';
 			GRANT ALL PRIVILEGES ON *.* TO '${user}'@'localhost';
 			FLUSH PRIVILEGES;
