@@ -22,10 +22,16 @@ soft="build-essential expect git git-core clang cmake make gcc g++ automake auto
 repos=$HOME/Repos
 servers=$HOME/Servers
 repo_tc335="-b 3.3.5 git://github.com/TrinityCore/TrinityCore.git"
+repo_ac335="https://github.com/azerothcore/azerothcore-wotlk.git --branch master --single-branch"
 db_tc335=https://github.com/TrinityCore/TrinityCore/releases/download/TDB335.20101/TDB_full_world_335.20101_2020_10_15.7z
-link_data335=https://arxius.tronosdesangre.es/index.php/s/YJWw6m9EWF52mAe
+link_data_tc335=https://arxius.tronosdesangre.es/index.php/s/YJWw6m9EWF52mAe
+link_data_ac=https://arxius.tronosdesangre.es/index.php/s/Had9DKpfkpT4q7k
 server_tc335=$HOME/Servers/TC355
+server_ac335=$HOME/Servers/AC355
 repoLoc_tc335=$HOME/Repos/TC335
+repoLoc_ac335=$HOME/Repos/AC335
+sql_ac_base=$repoLoc_ac335/data/sql/base
+sql_ac_updates=$repoLoc_ac335/data/sql/updates
 # OBTENGO NOMBRE DE ACHIVO COMPRIMIDO DE BASE DE DATOS
 arch_comp_db_tc335=$(basename "$db_tc335")
 # OBTENGO NOMBRE DE ACHIVO SQL
@@ -323,8 +329,12 @@ _EOF_
 						--backtitle $backtitle \
 						--pause "\nVamos a obtener los repositorios de TrinityCore" 10 50 5
 						clear && cd $repos && git clone $repo_tc335 TC335
+					else
+						dialog --title "INFORMACIÓN" \
+						--backtitle $backtitle \
+						--msgbox "\nNo es necesario descargar el repositorio. Ya se encuentra en tu equipo. Puedes utlilizar la opción de actualizar repositorios." 14 50
 					fi
-#					if [ ! -x $HOME/Repos/TDB-335  ];then
+					if [ ! -x $HOME/Repos/TDB-335  ];then
 						dialog --title "INFORMACIÓN" \
 						--backtitle $backtitle \
 						--pause "\nVamos a descargar la base de datos de TrinityCore 3.3.5." 10 50 5
@@ -332,7 +342,7 @@ _EOF_
 						cd $HOME/Repos && mkdir TDB-335
 						cd TDB-335 && wget $db_tc335
 						7z e $arch_comp_db_tc335
-#					fi
+					fi
 					dialog --title "INFORMACIÓN" \
 					--backtitle $backtitle \
 					--msgbox "\nTodos los repositorios están descargados." 8 50
@@ -396,7 +406,7 @@ _EOF_
 			elif [ "$opcion21" = "3 - DBC's, maps y vmaps - Descarga y colocación en directorio" ]; then
 				if [ ! -x $server_tc335/data  ];then
 					clear && cd $server_tc335
-					wget --no-check-certificate --content-disposition $link_data335/download -O data_tc335.zip
+					wget --no-check-certificate --content-disposition $link_data_tc335/download -O data_tc335.zip
 					unzip data_tc335.zip && rm data_tc335.zip
 					read -n 1 -s -r -p "Pulsa una tecla para continuar..." 
 					dialog --title "INFORMACIÓN" \
@@ -808,6 +818,352 @@ _EOF_
 			"0 - Volver" "" 2> ~/var21
 	  
 			opcion21=$(cat ~/var21)
+			rm ~/var*
+			done
+		fi
+
+
+#####################################################################################################
+# Menú - AzerothCore WotLK 3.3.5
+#####################################################################################################
+		if [ "$opcion2" = "2 - AzerothCore WotLK 3.3.5" ]; then
+			dialog --title "Menú de opciones --- Creado por MSANCHO" \
+			--backtitle $backtitle \
+			--nocancel \
+			--menu "\nOpciones disponibles:" 20 80 11 \
+			"1 - Obtención o actualización de todos los archivos necesarios" "" \
+			"2 - Compilar el emulador" "" \
+			"3 - DBC's, maps y vmaps - Descarga y colocación en directorio" "" \
+			"4 - Instalar y actualizar las Bases de Datos" "" \
+			"5 - Configuraciones varias" "" \
+			"0 - Volver" "" 2> ~/var22
+	  
+			opcion22=$(cat ~/var22)
+			rm ~/var*
+
+			while [ "$opcion22" != "0 - Volver" ]; do
+
+
+####################################################################
+# Menú - Obtención o actualización de todos los archivos necesarios
+####################################################################
+			if [ "$opcion22" = "1 - Obtención o actualización de todos los archivos necesarios" ]; then
+				dialog --title "Menú de opciones --- Creado por MSANCHO" \
+				--backtitle $backtitle \
+				--nocancel \
+				--menu "\nManejo de Repositorios y archivos" 20 60 8 \
+				"1 - Descargar repositorios" "" \
+				"2 - Actualizar repositorios" "" \
+				"0 - Volver" "" 2> ~/var221
+			  
+				opcion221=$(cat ~/var221)
+				rm ~/var*
+	
+				while [ "$opcion221" != "0 - Volver" ]; do
+
+
+####################################################################
+# Descargar repositorios
+####################################################################
+				if [ "$opcion221" = "1 - Descargar repositorios" ]; then
+					clear
+					if [ ! -x $HOME/Repos  ];then
+						dialog --title "INFORMACIÓN" \
+						--backtitle $backtitle \
+						--pause "\nSe va a crear la carpeta de repositorios dentro de nuestro home" 10 50 5
+						clear && cd $HOME/ && mkdir Repos
+					fi
+					if [ ! -x $repoLoc_ac335  ];then
+						dialog --title "INFORMACIÓN" \
+						--backtitle $backtitle \
+						--pause "\nVamos a obtener los repositorios de AzerothCore" 10 50 5
+						clear && cd $repos && git clone $repo_ac335 AC335
+					else
+						dialog --title "INFORMACIÓN" \
+						--backtitle $backtitle \
+						--msgbox "\nNo es necesario descargar el repositorio. Ya se encuentra en tu equipo. Puedes utlilizar la opción de actualizar repositorios." 14 50
+					fi
+					dialog --title "INFORMACIÓN" \
+					--backtitle $backtitle \
+					--msgbox "\nRepositorios están descargados." 8 50
+					clear
+
+
+####################################################################
+# Actualizar repositorios 
+####################################################################
+				elif [ "$opcion221" = "2 - Actualizar repositorios" ]; then
+					clear && cd $repoLoc_ac335 && git pull origin master
+					read -n 1 -s -r -p "Pulsa una tecla para continuar..." 
+					dialog --title "INFORMACIÓN" \
+					--backtitle $backtitle \
+					--pause "\nRepositorios del core actualizados." 10 50 5
+					clear
+					dialog --title "INFORMACIÓN" \
+					--backtitle $backtitle \
+					--msgbox "\nYa puedes recompilar el emulador de nuevo." 8 50
+					clear
+				fi
+
+
+########  CONCLUSIÓN MENÚ Obtención o actualización de todos los archivos necesarios  ########  
+				dialog --title "Menú de opciones --- Creado por MSANCHO" \
+				--backtitle $backtitle \
+				--nocancel \
+				--menu "\nManejo de Repositorios y archivos" 20 60 8 \
+				"1 - Descargar repositorios" "" \
+				"2 - Actualizar repositorios" "" \
+				"0 - Volver" "" 2> ~/var221
+		
+				opcion221=$(cat ~/var221)
+				rm ~/var*
+				done
+
+
+####################################################################
+# Compilar el emulador
+####################################################################
+			elif [ "$opcion22" = "2 - Compilar el emulador" ]; then
+				if [ ! -x $repoLoc_ac335/build  ];then
+					cd $repoLoc_ac335 && mkdir build
+				fi
+				if [ ! -x $HOME/Servers  ];then
+					cd $HOME && mkdir Servers
+				fi
+				cd $repoLoc_ac335/build  && clear
+				cmake ../ -DCMAKE_INSTALL_PREFIX=$server_ac335 -DTOOLS=0 -DSCRIPTS=1
+				make -j $(nproc) install
+				read -n 1 -s -r -p "Pulsa una tecla para continuar..." 
+				dialog --title "INFORMACIÓN" \
+				--backtitle $backtitle \
+				--msgbox "\nHas terminado de compilar tu emulador. Si todo ha salido correctamete lo encontrarás en tu home, dentro de la carpeta Servers/server_ac335" 9 50
+				clear
+
+
+####################################################################
+# DBC's, maps y vmaps - Descarga y colocación en directorio
+####################################################################
+			elif [ "$opcion22" = "3 - DBC's, maps y vmaps - Descarga y colocación en directorio" ]; then
+				if [ ! -x $server_ac335/data  ];then
+					clear && cd $server_ac335
+					wget --no-check-certificate --content-disposition $link_data_ac/download -O data_ac335.zip
+					unzip data_ac335.zip && rm data_ac335.zip
+					read -n 1 -s -r -p "Pulsa una tecla para continuar..." 
+					dialog --title "INFORMACIÓN" \
+					--backtitle $backtitle \
+					--msgbox "\nSe ha creado una carpeta llamada data con las dbc, maps, mmaps y vmaps en su interior" 8 50
+					clear
+				else
+					dialog --title "INFORMACIÓN" \
+					--backtitle $backtitle \
+					--msgbox "\nYa está la carpeta data creada y no se han descargado los archivos.\n\nSi deseas reinstalarlos de nuevo, borra la carpeta data de tu directorio del servidor y ejecuta de nuevo este mismo paso" 12 50
+				fi
+
+
+####################################################################
+# Instalar y actualizar las Bases de Datos
+####################################################################
+
+			elif [ "$opcion22" = "4 - Instalar y actualizar las Bases de Datos" ]; then
+				dialog --title "Menú de opciones --- Creado por MSANCHO" \
+				--backtitle $backtitle \
+				--nocancel \
+				--menu "\nInstalar las Bases de Datos" 20 80 8 \
+				"1 - Crear las Bases de datos" "" \
+				"2 - Poblar las Bases de datos" "" \
+				"3 - Actualizar las Bases de datos" "" \
+				"0 - Volver" "" 2> ~/var224
+
+				opcion224=$(cat ~/var224)
+				rm ~/var224
+	
+				while [ "$opcion224" != "0 - Volver" ]; do
+
+
+####################################################################
+# Crear las Bases de datos
+####################################################################
+				if [ "$opcion224" = "1 - Crear las Bases de datos" ]; then
+					dialog --title "ATENCIÓN!" \
+					--backtitle $backtitle \
+					--defaultno \
+					--yesno "\nVas a eliminar cualquier base de datos que tenga los nombres ${world}, ${auth} y ${char} creándolas de nuevo con sus estructuras predeterminadas. ¿Estás seguro?" 10 50 
+					if [ $? = 0 ]; then
+							mysql -u${user} -p${pass} --port=${port} <<_EOF_
+							CREATE DATABASE IF NOT EXISTS ${world} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+							CREATE DATABASE IF NOT EXISTS ${char} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+							CREATE DATABASE IF NOT EXISTS ${auth} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+							FLUSH PRIVILEGES;
+_EOF_
+						dialog --title "INFORMACIÓN" \
+						--backtitle $backtitle \
+						--msgbox "\nFinalizada la creación de las bases de datos ${world}, ${auth} y ${char}." 10 50
+						clear
+					fi
+
+
+####################################################################
+# Poblar las Bases de datos
+####################################################################
+				elif [ "$opcion224" = "2 - Poblar las Bases de datos" ]; then
+					dialog --title "ATENCIÓN!" \
+					--backtitle $backtitle \
+					--msgbox "\nVamos a insertar todos los datos en las DB de nuestro emulador. Este proceso puede demorar un poco" 10 50
+					clear
+					echo "Vamos a importar los archivos para la DB $auth"
+					sleep 3
+					max=`ls -1 "${sql_ac_base}/db_auth"/*.sql | wc -l`
+					i=0
+					for table in "${sql_ac_base}/db_auth"/*.sql; 
+					do
+						i=$((${i}+1))
+						echo " [${i}/${max}] importando: ${table##*/}"
+						mysql -u${user} -p${pass} --port=${port} ${auth} < "${table}"
+					done
+					echo " Se han instalado todas las tablas a $auth"
+					sleep 5
+
+					echo "Vamos a importar los archivos para la DB $char"
+					sleep 3
+					max=`ls -1 "${sql_ac_base}/db_characters"/*.sql | wc -l`
+					i=0
+					for table in "${sql_ac_base}/db_characters"/*.sql; 
+					do
+						i=$((${i}+1))
+						echo " [${i}/${max}] importando: ${table##*/}"
+						mysql -u${user} -p${pass} --port=${port} ${char} < "${table}"
+					done
+					echo " Se han instalado todas las tablas a $char"
+					sleep 5
+
+					echo "Vamos a importar los archivos para la DB $world"
+					sleep 3
+					max=`ls -1 "${sql_ac_base}/db_world"/*.sql | wc -l`
+					i=0
+					for table in "${sql_ac_base}/db_world"/*.sql; 
+					do
+						i=$((${i}+1))
+						echo " [${i}/${max}] importando: ${table##*/}"
+						mysql -u${user} -p${pass} --port=${port} ${world} < "${table}"
+					done
+					echo " Se han instalado todas las tablas a $world"
+					read -n 1 -s -r -p "Pulsa una tecla para continuar..." 
+
+
+####################################################################
+# Actualizar las Bases de datos
+####################################################################
+				elif [ "$opcion224" = "3 - Actualizar las Bases de datos" ]; then
+					dialog --title "ATENCIÓN!" \
+					--backtitle $backtitle \
+					--msgbox "\nVamos a insertar las actualizaciones de las DB de nuestro emulador. Este proceso puede demorar un poco" 10 50
+					clear
+					echo "Vamos a importar los archivos para la DB $auth"
+					sleep 3
+					max=`ls -1 "${sql_ac_updates}/db_auth"/*.sql | wc -l`
+					i=0
+					for table in "${sql_ac_updates}/db_auth"/*.sql; 
+					do
+						i=$((${i}+1))
+						echo " [${i}/${max}] importando: ${table##*/}"
+						mysql -u${user} -p${pass} --port=${port} ${auth} < "${table}"
+					done
+					echo " Se han instalado todas las tablas a $auth"
+					sleep 5
+
+					echo "Vamos a importar los archivos para la DB $char"
+					sleep 3
+					max=`ls -1 "${sql_ac_updates}/db_characters"/*.sql | wc -l`
+					i=0
+					for table in "${sql_ac_updates}/db_characters"/*.sql; 
+					do
+						i=$((${i}+1))
+						echo " [${i}/${max}] importando: ${table##*/}"
+						mysql -u${user} -p${pass} --port=${port} ${char} < "${table}"
+					done
+					echo " Se han instalado todas las tablas a $char"
+					sleep 5
+
+					echo "Vamos a importar los archivos para la DB $world"
+					sleep 3
+					max=`ls -1 "${sql_ac_updates}/db_world"/*.sql | wc -l`
+					i=0
+					for table in "${sql_ac_updates}/db_world"/*.sql; 
+					do
+						i=$((${i}+1))
+						echo " [${i}/${max}] importando: ${table##*/}"
+						mysql -u${user} -p${pass} --port=${port} ${world} < "${table}"
+					done
+					echo " Se han instalado todas las tablas a $world"
+					read -n 1 -s -r -p "Pulsa una tecla para continuar..." 
+
+				fi
+
+
+########  CONCLUSIÓN MENÚ Instalar y actualizar las Bases de Datos  ######## 
+				dialog --title "Menú de opciones --- Creado por MSANCHO" \
+				--backtitle $backtitle \
+				--nocancel \
+				--menu "\nInstalar las Bases de Datos" 20 80 8 \
+				"1 - Crear las Bases de datos" "" \
+				"2 - Poblar las Bases de datos" "" \
+				"3 - Actualizar las Bases de datos" "" \
+				"0 - Volver" "" 2> ~/var224
+		  
+				opcion224=$(cat ~/var224)
+				rm ~/var224
+				done
+			fi
+
+
+####################################################################
+# Configuraciones varias
+####################################################################
+			elif [ "$opcion22" = "5 - Configuraciones varias" ]; then
+				dialog --title "Menú de opciones --- Creado por MSANCHO" \
+				--backtitle $backtitle \
+				--nocancel \
+				--menu "\nConfiguraciones varias" 20 80 8 \
+				"1 - Configurar authserver.conf" "" \
+				"2 - Configurar worldserver.conf" "" \
+				"3 - Configurar tabla realmlist de la base de datos auth" "" \
+				"0 - Volver" "" 2> var215
+		  
+				opcion225=$(cat var225)
+				rm var225
+
+				while [ "$opcion225" != "0 - Volver" ]; do
+
+
+########  CONCLUSIÓN MENÚ Configuraciones varias  ########
+				dialog --title "Menú de opciones --- Creado por MSANCHO" \
+				--backtitle $backtitle \
+				--nocancel \
+				--menu "\nConfiguraciones varias" 20 80 8 \
+				"1 - Configurar authserver.conf" "" \
+				"2 - Configurar worldserver.conf" "" \
+				"3 - Configurar tabla realmlist de la base de datos auth" "" \
+				"0 - Volver" "" 2> var225
+		  
+				opcion225=$(cat var225)
+				rm var225
+				done
+			fi
+
+
+########  CONCLUSIÓN MENÚ AzerothCore WotLK 3.3.5  ######## 
+			dialog --title "Menú de opciones --- Creado por MSANCHO" \
+			--backtitle $backtitle \
+			--nocancel \
+			--menu "\nOpciones disponibles:" 20 80 11 \
+			"1 - Obtención o actualización de todos los archivos necesarios" "" \
+			"2 - Compilar el emulador" "" \
+			"3 - DBC's, maps y vmaps - Descarga y colocación en directorio" "" \
+			"4 - Instalar y actualizar las Bases de Datos" "" \
+			"5 - Configuraciones varias" "" \
+			"0 - Volver" "" 2> ~/var22
+	  
+			opcion22=$(cat ~/var22)
 			rm ~/var*
 			done
 		fi
