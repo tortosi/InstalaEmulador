@@ -78,7 +78,7 @@ dialog --title "INFORMACIÓN" \
 clear
 
 
-conecta="-h ${host} --port ${portReino} -u root -p ${pass}"
+conecta="-h ${host} --port ${port} -u ${user} -p ${pass}"
 
 #####################################################################################################
 # Menú de emuladores disponibles
@@ -173,7 +173,7 @@ elif [ "$opcion0" = "1 - Instalar programas preparación - esenciales" ]; then
 	
 	# AJUSTES DE MARIADB
 
-	sudo mysql $conecta <<_EOF_
+	sudo mysql -u root -p${pass} --port=${port} <<_EOF_
 	UPDATE mysql.user SET Password=PASSWORD('${pass}') WHERE User='root';
 	DELETE FROM mysql.user WHERE User='';
 	DROP DATABASE IF EXISTS test;
@@ -208,7 +208,7 @@ elif [ "$opcion0" = "2 - Crear usuario de mysql" ]; then
 	--backtitle $backtitle \
 	--msgbox "\nVamos a crear tu usuario de mysql para utilizar con las bases de datos del juego. El usuario que se creará será el siguiente: \nUsuario: $user \nContraseña: $pass \n" 10 70 
 	clear
-	mysql $conecta <<_EOF_
+	mysql -u root -p${pass} --port=${port}  <<_EOF_
 	CREATE USER ${user}@localhost IDENTIFIED BY '${pass}';
 	GRANT ALL PRIVILEGES ON *.* TO '${user}'@'localhost';
 	FLUSH PRIVILEGES;
@@ -393,13 +393,13 @@ elif [ "$opcion0" = "4 - Trinitycore versión 3.3.5a (12340)" ]; then
 			--defaultno \
 			--yesno "\nVas a eliminar cualquier base de datos que tenga los nombres ${world}, ${auth} y ${char} creándolas de nuevo con sus estructuras predeterminadas. ¿Estás seguro?" 10 50 
 			if [ $? = 0 ]; then
-					mysql $conecta <<_EOF_
+					mysql -u root -p${pass} --port=${port} <<_EOF_
 					CREATE DATABASE IF NOT EXISTS ${world} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 					CREATE DATABASE IF NOT EXISTS ${char} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 					CREATE DATABASE IF NOT EXISTS ${auth} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-					GRANT ALL PRIVILEGES ON ${world} . * TO '$master'@'localhost' WITH GRANT OPTION;
-					GRANT ALL PRIVILEGES ON ${char} . * TO '$master'@'localhost' WITH GRANT OPTION;
-					GRANT ALL PRIVILEGES ON ${auth} . * TO '$master'@'localhost' WITH GRANT OPTION;
+					GRANT ALL PRIVILEGES ON ${world} . * TO '$user'@'localhost' WITH GRANT OPTION;
+					GRANT ALL PRIVILEGES ON ${char} . * TO '$user'@'localhost' WITH GRANT OPTION;
+					GRANT ALL PRIVILEGES ON ${auth} . * TO '$user'@'localhost' WITH GRANT OPTION;
 					FLUSH PRIVILEGES;
 _EOF_
 				dialog --title "INFORMACIÓN" \
@@ -441,8 +441,8 @@ _EOF_
 		--backtitle $backtitle \
 		--nocancel \
 		--menu "\nConfiguraciones varias" 20 80 8 \
-		"1 - Configurar tabla realmlist de la base de datos auth" "" \
-		"2 - Configurar authserver.conf y worldserver.conf" "" \
+		"1 - Configurar authserver.conf y worldserver.conf" "" \
+		"2 - Configurar tabla realmlist de la base de datos auth" "" \
 		"0 - Volver" "" 2> var55
 		  
 		opcion55=$(cat var55)
@@ -452,40 +452,9 @@ _EOF_
 
 
 ####################################################################
-# Configurar tabla realmlist de la base de datos auth
-####################################################################
-		if [ "$opcion55" = "1 - Configurar tabla realmlist de la base de datos auth" ]; then
-			rm -f $server_tricore/etc/confrealm.sql
-			echo "REPLACE INTO \`realmlist\` (\`id\`,\`name\`,\`address\`,\`localAddress\`,\`port\`,\`icon\`,\`color\`,\`timezone\`,\`allowedSecurityLevel\`,\`population\`,\`gamebuild\`) VALUES
-(1,'NombreReino','addressReino','127.0.0.1',portReino,1,0,1,0,0,12340);" >> $server_tricore/etc/confrealm.sql
-
-			conf6=$(dialog --title "CONFIGURACIÓN TABLA realmlist de la DB auth" \
-			--backtitle $backtitle \
-			--inputbox "\nNombre que le quieres dar a tu reino:" 10 51 Trinity 2>&1 >/dev/tty)
-			sed -e "s/NombreReino/$conf6/g" -i $server_tricore/etc/confrealm.sql
-
-			conf7=$(dialog --title "CONFIGURACIÓN TABLA realmlist de la DB auth" \
-			--backtitle $backtitle \
-			--inputbox "\nIp de conexión a tu servidor:" 10 51 127.0.0.1 2>&1 >/dev/tty)
-			sed -e "s/addressReino/$conf7/g" -i $server_tricore/etc/confrealm.sql
-
-			conf8=$(dialog --title "CONFIGURACIÓN TABLA realmlist de la DB auth" \
-			--backtitle $backtitle \
-			--inputbox "\nPuerto de conexión:" 10 51 8085 2>&1 >/dev/tty)
-			sed -e "s/portReino/$conf8/g" -i $server_tricore/etc/confrealm.sql
-
-			mysql $conecta $auth < $server_tricore/etc/confrealm.sql
-			rm -f $server_tricore/etc/confrealm.sql
-			dialog --title "INFORMACIÓN" \
-			--backtitle $backtitle \
-			--msgbox "\nYa tienes la Tabla realmlist configurada" 10 50
-			clear
-
-
-####################################################################
 # Configurar authserver.conf y worldserver.conf
 ####################################################################
-		elif [ "$opcion55" = "2 - Configurar authserver.conf y worldserver.conf" ]; then
+		if [ "$opcion55" = "1 - Configurar authserver.conf y worldserver.conf" ]; then
 			dialog --title "Menú de opciones --- Creado por MSANCHO" \
 			--backtitle $backtitle \
 			--nocancel \
@@ -515,22 +484,15 @@ _EOF_
 				--backtitle $backtitle \
 				--inputbox "\nDirectorio del archivo logs: \nValor por defecto logs" 10 51 logs 2>&1 >/dev/tty)
 				sed -e "s/LogsDir = \"\"/LogsDir = \"\.\.\/$conf\"/g" -i $server_tricore/etc/authserver.temp
+				if [ ! -x $server_tricore/$conf7  ];then
+				mkdir $server_tricore/$conf
+				fi
 
-				conf3=$(dialog --title "CONFIGURACIÓN DEL authserver.conf" \
-				--backtitle $backtitle \
-				--inputbox "\nUsuario de MySQL: \nValor por defecto master" 10 51 master 2>&1 >/dev/tty)
-				sed -e "s/sqluser/$conf3/g" -i $server_tricore/etc/authserver.temp
+				sed -e "s/sqluser/$user/g" -i $server_tricore/etc/authserver.temp
 
-				conf4=$(dialog --title "CONFIGURACIÓN DEL authserver.conf" \
-				--backtitle $backtitle \
-				--insecure \
-				--passwordbox "\nContraseña de MySQL: " 10 51 2>&1 >/dev/tty)
-				sed -e "s/sqlpass/$conf4/g" -i $server_tricore/etc/authserver.temp
+				sed -e "s/sqlpass/$pass/g" -i $server_tricore/etc/authserver.temp
 
-				conf5=$(dialog --title "CONFIGURACIÓN DEL authserver.conf" \
-				--backtitle $backtitle \
-				--inputbox "\nNombre de la base de datos Autentificación: \nValor por defecto $auth" 10 51 $auth 2>&1 >/dev/tty)
-				sed -e "s/dbauth/$conf5/g" -i $server_tricore/etc/authserver.temp
+				sed -e "s/dbauth/$auth/g" -i $server_tricore/etc/authserver.temp
 
 				# PidFile = "auth.pid" NO TOCAR!!! IMPRESCINDIBLE.
 				sed -e "s/PidFile = \"\"/PidFile = \"auth.pid\"/g" -i $server_tricore/etc/authserver.temp
@@ -540,7 +502,7 @@ _EOF_
 				rm -f $server_tricore/etc/authserver.temp
 				dialog --title "INFORMACIÓN" \
 				--backtitle $backtitle \
-				--msgbox "\nHas configurado el archivo authserver.conf.\n\nSi los valores que has introducido son correctos ya puedes arrancar el servidor de logueo." 10 50
+				--msgbox "\nEl resto de valores se han configurado automáticamente con los datos que has introducido al arrancar el script. Ya puedes arrancar el servidor de logueo." 10 50
 				clear
 
 
@@ -565,32 +527,19 @@ _EOF_
 				--backtitle $backtitle \
 				--inputbox "\nOpción 2/42\n\nDirectorio del archivo logs: \nValor por defecto logs" 12 51 logs 2>&1 >/dev/tty)
 				sed -e "s/LogsDir = \"\"/LogsDir = \"\.\.\/$conf7\"/g" -i $server_tricore/etc/world.conf
+				if [ ! -x $server_tricore/$conf7  ];then
+				mkdir $server_tricore/$conf7
+				fi
 
-				conf8=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
-				--backtitle $backtitle \
-				--inputbox "\nOpción 3/42\n\nUsuario de MySQL: \nValor por defecto master" 12 51 master 2>&1 >/dev/tty)
-				sed -e "s/sqluser/$conf8/g" -i $server_tricore/etc/world.conf
+				sed -e "s/sqluser/$user/g" -i $server_tricore/etc/world.conf
 
-				conf9=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
-				--backtitle $backtitle \
-				--insecure \
-				--passwordbox "\nOpción 4/42\n\nContraseña de MySQL: " 12 51 2>&1 >/dev/tty)
-				sed -e "s/sqlpass/$conf9/g" -i $server_tricore/etc/world.conf
+				sed -e "s/sqlpass/$pass/g" -i $server_tricore/etc/world.conf
 
-				conf10=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
-				--backtitle $backtitle \
-				--inputbox "\nOpción 5/42\n\nNombre de la base de datos Autentificación: \nValor por defecto $auth" 12 51 $auth 2>&1 >/dev/tty)
-				sed -e "s/dbauth/$conf10/g" -i $server_tricore/etc/world.conf
+				sed -e "s/dbauth/$auth/g" -i $server_tricore/etc/world.conf
 
-				conf11=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
-				--backtitle $backtitle \
-				--inputbox "\nOpción 6/42\n\nNombre de la base de datos del World: \nValor por defecto $world" 12 51 $world 2>&1 >/dev/tty)
-				sed -e "s/dbworld/$conf11/g" -i $server_tricore/etc/world.conf
+				sed -e "s/dbworld/$world/g" -i $server_tricore/etc/world.conf
 
-				conf12=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
-				--backtitle $backtitle \
-				--inputbox "\nOpción 7/42\n\nNombre de la base de datos de Characters: \nValor por defecto $char" 12 51 $char 2>&1 >/dev/tty)
-				sed -e "s/dbchar/$conf12/g" -i $server_tricore/etc/world.conf
+				sed -e "s/dbchar/$char/g" -i $server_tricore/etc/world.conf
 
 				conf13=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 				--backtitle $backtitle \
@@ -761,7 +710,37 @@ _EOF_
 				--backtitle $backtitle \
 				--msgbox "\nHas configurado el archivo worldserver.conf.\n\nSi los valores que has introducido son correctos ya puedes arrancar el servidor del juego." 10 50
 				clear
-			fi
+
+####################################################################
+# Configurar tabla realmlist de la base de datos auth
+####################################################################
+		elif [ "$opcion55" = "2 - Configurar tabla realmlist de la base de datos auth" ]; then
+			rm -f $server_tricore/etc/confrealm.sql
+			echo "REPLACE INTO \`realmlist\` (\`id\`,\`name\`,\`address\`,\`localAddress\`,\`port\`,\`icon\`,\`color\`,\`timezone\`,\`allowedSecurityLevel\`,\`population\`,\`gamebuild\`) VALUES
+(1,'NombreReino','addressReino','127.0.0.1',portReino,1,0,1,0,0,12340);" >> $server_tricore/etc/confrealm.sql
+
+			conf6=$(dialog --title "CONFIGURACIÓN TABLA realmlist de la DB auth" \
+			--backtitle $backtitle \
+			--inputbox "\nNombre que le quieres dar a tu reino:" 10 51 Trinity 2>&1 >/dev/tty)
+			sed -e "s/NombreReino/$conf6/g" -i $server_tricore/etc/confrealm.sql
+
+			conf7=$(dialog --title "CONFIGURACIÓN TABLA realmlist de la DB auth" \
+			--backtitle $backtitle \
+			--inputbox "\nIp de conexión a tu servidor:" 10 51 127.0.0.1 2>&1 >/dev/tty)
+			sed -e "s/addressReino/$conf7/g" -i $server_tricore/etc/confrealm.sql
+
+			conf8=$(dialog --title "CONFIGURACIÓN TABLA realmlist de la DB auth" \
+			--backtitle $backtitle \
+			--inputbox "\nPuerto de conexión:" 10 51 8085 2>&1 >/dev/tty)
+			sed -e "s/portReino/$conf8/g" -i $server_tricore/etc/confrealm.sql
+
+			mysql -u root -p${pass} --port=${port} $auth < $server_tricore/etc/confrealm.sql
+			rm -f $server_tricore/etc/confrealm.sql
+			dialog --title "INFORMACIÓN" \
+			--backtitle $backtitle \
+			--msgbox "\nYa tienes la Tabla realmlist configurada" 10 50
+			clear
+		fi
 
 
 ########  CONCLUSIÓN MENÚ Configurar authserver.conf y worldserver.conf  ########
@@ -784,8 +763,8 @@ _EOF_
 		--backtitle $backtitle \
 		--nocancel \
 		--menu "\nConfiguraciones varias" 20 80 8 \
-		"1 - Configurar tabla realmlist de la base de datos auth" "" \
-		"2 - Configurar authserver.conf y worldserver.conf" "" \
+		"1 - Configurar authserver.conf y worldserver.conf" "" \
+		"2 - Configurar tabla realmlist de la base de datos auth" "" \
 		"0 - Volver" "" 2> var55
 		  
 		opcion55=$(cat var55)
