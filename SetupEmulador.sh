@@ -54,7 +54,7 @@ world=$(dialog --title "DATOS DE CONEXIÓN" \
 host=$(dialog --title "DATOS DE CONEXIÓN" \
 --backtitle $backtitle \
 --nocancel \
---inputbox "\nDirección IP del host: \nValor por defecto localhost" 10 51 localhost 2>&1 >/dev/tty)
+--inputbox "\nDirección IP host de Base de Dados: \nValor por defecto localhost" 10 51 localhost 2>&1 >/dev/tty)
 
 port=$(dialog --title "DATOS DE CONEXIÓN" \
 --backtitle $backtitle \
@@ -221,7 +221,7 @@ _EOF_
 			--backtitle $backtitle \
 			--msgbox "\nVamos a crear tu usuario de mysql para utilizar con las bases de datos del juego. El usuario que se creará será el siguiente: \nUsuario: $user \nContraseña: $pass \n" 10 70 
 			clear
-			mysql -u root -p${pass} --port=${port}  <<_EOF_
+			mysql -u${user} -p${pass} --port=${port}  <<_EOF_
 			CREATE USER ${user}@localhost IDENTIFIED BY '${pass}';
 			GRANT ALL PRIVILEGES ON *.* TO '${user}'@'localhost';
 			FLUSH PRIVILEGES;
@@ -430,13 +430,10 @@ _EOF_
 					--defaultno \
 					--yesno "\nVas a eliminar cualquier base de datos que tenga los nombres ${world}, ${auth} y ${char} creándolas de nuevo con sus estructuras predeterminadas. ¿Estás seguro?" 10 50 
 					if [ $? = 0 ]; then
-							mysql -u root -p${pass} --port=${port} <<_EOF_
+							mysql -u${user} -p${pass} --port=${port} <<_EOF_
 							CREATE DATABASE IF NOT EXISTS ${world} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 							CREATE DATABASE IF NOT EXISTS ${char} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 							CREATE DATABASE IF NOT EXISTS ${auth} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-							GRANT ALL PRIVILEGES ON ${world} . * TO '$user'@'localhost' WITH GRANT OPTION;
-							GRANT ALL PRIVILEGES ON ${char} . * TO '$user'@'localhost' WITH GRANT OPTION;
-							GRANT ALL PRIVILEGES ON ${auth} . * TO '$user'@'localhost' WITH GRANT OPTION;
 							FLUSH PRIVILEGES;
 _EOF_
 						dialog --title "INFORMACIÓN" \
@@ -452,9 +449,9 @@ _EOF_
 				elif [ "$opcion214" = "2 - Poblar las Bases de datos" ]; then
 					dialog --title "ATENCIÓN!" \
 					--backtitle $backtitle \
-					--msgbox "\nEn TrinityCore, la inyección de datos en las tablas ${world}, ${auth} y ${char} se hacen\nautomáticamente al arranar el emulador. De todos modos vamos a poblar en este moneto ${auth} para facilitar un proceso necesario." 10 50
+					--msgbox "\nEn TrinityCore, la inyección de datos en las tablas ${world}, ${auth} y ${char} se hacen\nautomáticamente al arranar el emulador. De todos modos vamos a poblar en este moneto ${auth} para facilitar un proceso necesario." 14 50
 					clear
-					mysql -u root -p${pass} --port=${port} $auth < $repoLoc_tc335/sql/base/auth_database.sql
+					mysql -u${user} -p${pass} --port=${port} $auth < $repoLoc_tc335/sql/base/auth_database.sql
 				fi
 
 
@@ -483,7 +480,7 @@ _EOF_
 				"1 - Configurar authserver.conf" "" \
 				"2 - Configurar worldserver.conf" "" \
 				"3 - Configurar tabla realmlist de la base de datos auth" "" \
-				"0 - Volver" "" 2> var55
+				"0 - Volver" "" 2> var215
 		  
 				opcion215=$(cat var215)
 				rm var215
@@ -500,7 +497,7 @@ _EOF_
 					fi
 					cp $server_tc335/etc/authserver.conf.dist $server_tc335/etc/authserver.temp
 
-					sed -e "s/LoginDatabaseInfo = \"127\.0\.0\.1;3306;trinity;trinity;auth\"/LoginDatabaseInfo = \"127\.0\.0\.1;3306;sqluser;sqlpass;dbauth\"/g" -i $server_tc335/etc/authserver.temp
+					sed -e "s/LoginDatabaseInfo = \"127\.0\.0\.1;3306;trinity;trinity;auth\"/LoginDatabaseInfo = \"127\.0\.0\.1;port;sqluser;sqlpass;dbauth\"/g" -i $server_tc335/etc/authserver.temp
 
 					conf=$(dialog --title "CONFIGURACIÓN DEL authserver.conf" \
 					--backtitle $backtitle \
@@ -509,6 +506,8 @@ _EOF_
 					if [ ! -x $server_tc335/$conf7  ];then
 						mkdir $server_tc335/$conf
 					fi
+
+					sed -e "s/port/$port/g" -i $server_tc335/etc/authserver.temp
 
 					sed -e "s/sqluser/$user/g" -i $server_tc335/etc/authserver.temp
 
@@ -536,9 +535,9 @@ _EOF_
 						rm -f $server_tc335/etc/world.conf
 					fi
 					cp $server_tc335/etc/worldserver.conf.dist $server_tc335/etc/world.conf
-					sed -e "s/LoginDatabaseInfo     = \"127\.0\.0\.1;3306;trinity;trinity;auth\"/LoginDatabaseInfo     = \"127\.0\.0\.1;3306;sqluser;sqlpass;dbauth\"/g" -i $server_tc335/etc/world.conf
-					sed -e "s/WorldDatabaseInfo     = \"127\.0\.0\.1;3306;trinity;trinity;world\"/WorldDatabaseInfo     = \"127\.0\.0\.1;3306;sqluser;sqlpass;dbworld\"/g" -i $server_tc335/etc/world.conf
-					sed -e "s/CharacterDatabaseInfo = \"127\.0\.0\.1;3306;trinity;trinity;characters\"/CharacterDatabaseInfo = \"127\.0\.0\.1;3306;sqluser;sqlpass;dbchar\"/g" -i $server_tc335/etc/world.conf
+					sed -e "s/LoginDatabaseInfo     = \"127\.0\.0\.1;3306;trinity;trinity;auth\"/LoginDatabaseInfo     = \"127\.0\.0\.1;port;sqluser;sqlpass;dbauth\"/g" -i $server_tc335/etc/world.conf
+					sed -e "s/WorldDatabaseInfo     = \"127\.0\.0\.1;3306;trinity;trinity;world\"/WorldDatabaseInfo     = \"127\.0\.0\.1;port;sqluser;sqlpass;dbworld\"/g" -i $server_tc335/etc/world.conf
+					sed -e "s/CharacterDatabaseInfo = \"127\.0\.0\.1;3306;trinity;trinity;characters\"/CharacterDatabaseInfo = \"127\.0\.0\.1;port;sqluser;sqlpass;dbchar\"/g" -i $server_tc335/etc/world.conf
 
 					conf6=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 					--backtitle $backtitle \
@@ -552,6 +551,8 @@ _EOF_
 					if [ ! -x $server_tc335/$conf7  ];then
 						mkdir $server_tc335/$conf7
 					fi
+
+					sed -e "s/port/$port/g" -i $server_tc335/etc/world.conf
 
 					sed -e "s/sqluser/$user/g" -i $server_tc335/etc/world.conf
 
@@ -737,10 +738,10 @@ _EOF_
 ####################################################################
 # Configurar tabla realmlist de la base de datos auth
 ####################################################################
-				elif [ "$opcion215" = "2 - Configurar tabla realmlist de la base de datos auth" ]; then
-					rm -f $server_tricore/etc/confrealm.sql
-					echo "REPLACE INTO \`realmlist\` (\`id\`,\`name\`,\`address\`,\`localAddress\`,\`port\`,\`icon\`,\`color\`,\`timezone\`,\`allowedSecurityLevel\`,\`population\`,\`gamebuild\`) VALUES
-(1,'NombreReino','addressReino','127.0.0.1',portReino,1,0,1,0,0,12340);" >> $server_tricore/etc/confrealm.sql
+				elif [ "$opcion215" = "3 - Configurar tabla realmlist de la base de datos auth" ]; then
+					rm -f $server_tc335/etc/confrealm.sql
+					echo "REPLACE INTO \`realmlist\` (\`id\`,\`name\`,\`address\`,\`localAddress\`,\`port\`,\`icon\`,\`flag\`,\`timezone\`,\`allowedSecurityLevel\`,\`population\`,\`gamebuild\`) VALUES
+(1,'NombreReino','addressReino','127.0.0.1',portReino,1,2,1,0,0,12340);" >> $server_tc335/etc/confrealm.sql
 					
 					conf1=$(dialog --title "CONFIGURACIÓN TABLA realmlist de la DB auth" \
 					--backtitle $backtitle \
@@ -762,7 +763,7 @@ _EOF_
 					--inputbox "\nPuerto de conexión:" 10 51 8085 2>&1 >/dev/tty)
 					sed -e "s/portReino/$conf4/g" -i $server_tc335/etc/confrealm.sql
 
-					mysql -u root -p${pass} --port=${port} $auth < $server_tc335/etc/confrealm.sql
+					mysql -u${user} -p${pass} --port=${port} $auth < $server_tc335/etc/confrealm.sql
 					rm -f $server_tc335/etc/confrealm.sql
 					dialog --title "INFORMACIÓN" \
 					--backtitle $backtitle \
