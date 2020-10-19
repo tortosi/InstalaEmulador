@@ -94,8 +94,8 @@ dialog --title "Menú de opciones --- Creado por MSANCHO" \
 "i - Información - Guía de uso" "" \
 "1 - Preparación del sistema - Esenciales" "" \
 "2 - Emuladores disponibles" "" \
-"3 - Copias de seguridad de las Bases de Datos" "" \
-"4 - Conexión por Telnet a nuestro servidor" "" \
+"3 - Copias de seguridad de las Bases de Datos - PRÓXIMAMENTE" "" \
+"4 - Conexión por Telnet a nuestro servidor - PRÓXIMAMENTE" "" \
 "0 - Salir de la aplicación" "" 2> ~/var0
 	  
 opcion0=$(cat ~/var0)
@@ -266,7 +266,7 @@ _EOF_
 		--menu "\nEmuladores disponibles" 20 60 8 \
 		"1 - TrinityCore WotLK 3.3.5" "" \
 		"2 - AzerothCore WotLK 3.3.5" "" \
-		"3 - Vanilla MaNGOS 1.2/1.12" "" \
+		"3 - Vanilla MaNGOS 1.2/1.12 - PRÓXIMAMENTE" "" \
 		"0 - Volver" "" 2> ~/var2
 	  
 		opcion2=$(cat ~/var2)
@@ -1475,7 +1475,7 @@ _EOF_
 		--menu "\nEmuladores disponibles" 20 60 8 \
 		"1 - TrinityCore WotLK 3.3.5" "" \
 		"2 - AzerothCore WotLK 3.3.5" "" \
-		"3 - Vanilla MaNGOS 1.2/1.12" "" \
+		"3 - Vanilla MaNGOS 1.2/1.12 - PRÓXIMAMENTE" "" \
 		"0 - Volver" "" 2> ~/var2
 	  
 		opcion2=$(cat ~/var2)
@@ -1493,8 +1493,8 @@ dialog --title "Menú de opciones --- Creado por MSANCHO" \
 "i - Información - Guía de uso" "" \
 "1 - Preparación del sistema - Esenciales" "" \
 "2 - Emuladores disponibles" "" \
-"3 - Copias de seguridad de las Bases de Datos" "" \
-"4 - Conexión por Telnet a nuestro servidor" "" \
+"3 - Copias de seguridad de las Bases de Datos - PRÓXIMAMENTE" "" \
+"4 - Conexión por Telnet a nuestro servidor - PRÓXIMAMENTE" "" \
 "0 - Salir de la aplicación" "" 2> ~/var0
 	  
 opcion0=$(cat ~/var0)
