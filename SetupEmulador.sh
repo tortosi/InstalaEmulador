@@ -559,12 +559,12 @@ _EOF_
 
 					conf6=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 					--backtitle $backtitle \
-					--inputbox "\nOpción 1/42\n\nDirectorio del archivo data: \nValor por defecto data" 12 51 data 2>&1 >/dev/tty)
+					--inputbox "\nOpción 1/27\n\nDirectorio del archivo data: \nValor por defecto data" 12 51 data 2>&1 >/dev/tty)
 					sed -e "s/DataDir = \"\.\"/DataDir = \"\.\.\/$conf6\"/g" -i $server_tc335/etc/world.conf
 
 					conf7=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 					--backtitle $backtitle \
-					--inputbox "\nOpción 2/42\n\nDirectorio del archivo logs: \nValor por defecto logs" 12 51 logs 2>&1 >/dev/tty)
+					--inputbox "\nOpción 2/27\n\nDirectorio del archivo logs: \nValor por defecto logs" 12 51 logs 2>&1 >/dev/tty)
 					sed -e "s/LogsDir = \"\"/LogsDir = \"\.\.\/$conf7\"/g" -i $server_tc335/etc/world.conf
 					if [ ! -x $server_tc335/$conf7  ];then
 						mkdir $server_tc335/$conf7
@@ -584,18 +584,18 @@ _EOF_
 
 					conf13=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 					--backtitle $backtitle \
-					--inputbox "\nOpción 8/42\n\nPuerto de conexión al worldserver: \nValor por defecto 8085" 12 51 8085 2>&1 >/dev/tty)
+					--inputbox "\nOpción 3/27\n\nPuerto de conexión al worldserver: \nValor por defecto 8085" 12 51 8085 2>&1 >/dev/tty)
 					sed -e "s/WorldServerPort = 8085/WorldServerPort = $conf13/g" -i $server_tc335/etc/world.conf
 
 					conf14=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 					--backtitle $backtitle \
-					--inputbox "\nOpción 9/42\n\nLímite de jugadores conectados simultaneamente.\nSi escribimos 0 no hay límite de conectados.\nValor por defecto 100" 12 51 100 2>&1 >/dev/tty)
+					--inputbox "\nOpción 4/27\n\nLímite de jugadores conectados simultaneamente.\nSi escribimos 0 no hay límite de conectados.\nValor por defecto 100" 12 51 100 2>&1 >/dev/tty)
 					sed -e "s/PlayerLimit = 0/PlayerLimit = $conf14/g" -i $server_tc335/etc/world.conf
 
 					dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 					--backtitle $backtitle \
 					--nocancel \
-					--menu "\nOpción 13/42\n\nTipo de Reino - Quieres un reino PVP o Normal?\nEn los reinos normales se puede desconetar que los de la facción contraria te puedan atacer. En los PVP te pueden atacar menos en los santuarios.\n\n\n\n" 20 80 4 \
+					--menu "\nOpción 5/27\n\nTipo de Reino - Quieres un reino PVP o Normal?\nEn los reinos normales se puede desconetar que los de la facción contraria te puedan atacer. En los PVP te pueden atacar menos en los santuarios.\n\n\n\n" 20 80 4 \
 					"1 - Reino PVP" "" \
 					"2 - Reino Normal" "" 2> conf16
 					conf16=$(cat conf16)
@@ -610,107 +610,107 @@ _EOF_
 
 					dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 					--backtitle $backtitle \
-					--yesno "\nOpción 15/42\n\n¿Quieres que se anuncien por taberna los eventos automáticos?" 12 51
+					--yesno "\nOpción 6/27\n\n¿Quieres que se anuncien por taberna los eventos automáticos?" 12 51
 					if [ $? = 0 ]; then
 						sed -e "s/Event.Announce = 0/Event.Announce = 1/g" -i $server_tc335/etc/world.conf
 					fi
 
 					dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 					--backtitle $backtitle \
-					--yesno "\nOpción 18/42\n\n¿Quieres que los Alianzas y los Hordas se puedan comunicar por los canales de chat como taberna o \"decir\"?" 12 51
+					--yesno "\nOpción 7/27\n\n¿Quieres que los Alianzas y los Hordas se puedan comunicar por los canales de chat como taberna o \"decir\"?" 12 51
 					if [ $? = 0 ]; then
 						sed -e "s/AllowTwoSide.Interaction.Channel = 0/AllowTwoSide.Interaction.Channel = 1/g" -i $server_tc335/etc/world.conf
 					fi
 
 					dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 					--backtitle $backtitle \
-					--yesno "\nOpción 19/42\n\n¿Quieres que se puedan crear grupos mixtos entre Hordas y Alianzas?\nEsto es útil para cuando hay poca población en el servidor poder hacer mazmorras o raids conjuntamente." 12 51
+					--yesno "\nOpción 8/27\n\n¿Quieres que se puedan crear grupos mixtos entre Hordas y Alianzas?\nEsto es útil para cuando hay poca población en el servidor poder hacer mazmorras o raids conjuntamente." 12 51
 					if [ $? = 0 ]; then
 						sed -e "s/AllowTwoSide.Interaction.Group = 0/AllowTwoSide.Interaction.Group = 1/g" -i $server_tc335/etc/world.conf
 					fi
 
 					dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 					--backtitle $backtitle \
-					--yesno "\nOpción 20/42\n\n¿Quieres que se pueda interactuar en las subastas entre Hordas y Alianzas?\nEsto es útil para cuando hay poca población en el servidor." 12 51
+					--yesno "\nOpción 9/27\n\n¿Quieres que se pueda interactuar en las subastas entre Hordas y Alianzas?\nEsto es útil para cuando hay poca población en el servidor." 12 51
 					if [ $? = 0 ]; then
 						sed -e "s/AllowTwoSide.Interaction.Auction = 0/AllowTwoSide.Interaction.Auction = 1/g" -i $server_tc335/etc/world.conf
 					fi
 
 					dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 					--backtitle $backtitle \
-					--yesno "\nOpción 22/42\n\n¿Quieres que se pueda comerciar con la facción contraria?." 12 51
+					--yesno "\nOpción 10/27\n\n¿Quieres que se pueda comerciar con la facción contraria?." 12 51
 					if [ $? = 0 ]; then
 						sed -e "s/AllowTwoSide.Trade = 0/AllowTwoSide.Trade = 1/g" -i $server_tc335/etc/world.conf
 					fi
 
 					dialog --title "INFORMACIÓN" \
 					--backtitle $backtitle \
-					--msgbox "\nOpción 23/42\n\nRATES DEL SERVIDOR:\n\nLos rates son lo que determinan lo rápido que se avanza en el juego.\nLos servidores de Blizzard tienen un rate de x1 por lo que si nosotros ponemos rates x3 se multiplican los valores al triple.\nEjemplo: Ponemos rates de experiencia al matar bichos x3. Si al nivel 10 para subir al 11 debemos matar 30 zebras en el de Blizzard, al nuestro con 10 ya sería suficiente." 22 60
+					--msgbox "\nOpción 11/27\n\nRATES DEL SERVIDOR:\n\nLos rates son lo que determinan lo rápido que se avanza en el juego.\nLos servidores de Blizzard tienen un rate de x1 por lo que si nosotros ponemos rates x3 se multiplican los valores al triple.\nEjemplo: Ponemos rates de experiencia al matar bichos x3. Si al nivel 10 para subir al 11 debemos matar 30 zebras en el de Blizzard, al nuestro con 10 ya sería suficiente." 22 60
 					clear
 
 					conf17=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 					--backtitle $backtitle \
-					--inputbox "\nOpción 24/42\n\nRATES DEL SERVIDOR:\nRates de objetos mediocres(grises)" 12 51 1 2>&1 >/dev/tty)
+					--inputbox "\nOpción 12/27\n\nRATES DEL SERVIDOR:\nRates de objetos mediocres(grises)" 12 51 1 2>&1 >/dev/tty)
 					sed -e "s/Rate.Drop.Item.Poor             = 1/Rate.Drop.Item.Poor             = $conf17/g" -i $server_tc335/etc/world.conf
 
 					conf18=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 					--backtitle $backtitle \
-					--inputbox "\nOpción 25/42\n\nRATES DEL SERVIDOR:\nRates de objetos normales(blancos)" 12 51 1 2>&1 >/dev/tty)
+					--inputbox "\nOpción 13/27\n\nRATES DEL SERVIDOR:\nRates de objetos normales(blancos)" 12 51 1 2>&1 >/dev/tty)
 					sed -e "s/Rate.Drop.Item.Normal           = 1/Rate.Drop.Item.Normal           = $conf18/g" -i $server_tc335/etc/world.conf
 
 					conf19=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 					--backtitle $backtitle \
-					--inputbox "\nOpción 26/42\n\nRATES DEL SERVIDOR:\nRates de objetos poco frecuentes(verdes)" 12 51 1 2>&1 >/dev/tty)
+					--inputbox "\nOpción 14/27\n\nRATES DEL SERVIDOR:\nRates de objetos poco frecuentes(verdes)" 12 51 1 2>&1 >/dev/tty)
 					sed -e "s/Rate.Drop.Item.Uncommon         = 1/Rate.Drop.Item.Uncommon         = $conf19/g" -i $server_tc335/etc/world.conf
 
 					conf20=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 					--backtitle $backtitle \
-					--inputbox "\nOpción 27/42\n\nRATES DEL SERVIDOR:\nRates de objetos raros(azules)" 12 51 1 2>&1 >/dev/tty)
+					--inputbox "\nOpción 15/27\n\nRATES DEL SERVIDOR:\nRates de objetos raros(azules)" 12 51 1 2>&1 >/dev/tty)
 					sed -e "s/Rate.Drop.Item.Rare             = 1/Rate.Drop.Item.Rare             = $conf20/g" -i $server_tc335/etc/world.conf
 
 					conf21=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 					--backtitle $backtitle \
-					--inputbox "\nOpción 28/42\n\nRATES DEL SERVIDOR:\nRates de objetos épicos(morados)" 12 51 1 2>&1 >/dev/tty)
+					--inputbox "\nOpción 16/27\n\nRATES DEL SERVIDOR:\nRates de objetos épicos(morados)" 12 51 1 2>&1 >/dev/tty)
 					sed -e "s/Rate.Drop.Item.Epic             = 1/Rate.Drop.Item.Epic             = $conf21/g" -i $server_tc335/etc/world.conf
 
 					conf22=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 					--backtitle $backtitle \
-					--inputbox "\nOpción 29/42\n\nRATES DEL SERVIDOR:\nRates de objetos legendarios(anaranjados)" 12 51 1 2>&1 >/dev/tty)
+					--inputbox "\nOpción 17/27\n\nRATES DEL SERVIDOR:\nRates de objetos legendarios(anaranjados)" 12 51 1 2>&1 >/dev/tty)
 					sed -e "s/Rate.Drop.Item.Legendary        = 1/Rate.Drop.Item.Legendary        = $conf22/g" -i $server_tc335/etc/world.conf
 
 					conf23=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 					--backtitle $backtitle \
-					--inputbox "\nOpción 30/42\n\nRATES DEL SERVIDOR:\nRates de objetos artefactos" 12 51 1 2>&1 >/dev/tty)
+					--inputbox "\nOpción 18/27\n\nRATES DEL SERVIDOR:\nRates de objetos artefactos" 12 51 1 2>&1 >/dev/tty)
 					sed -e "s/Rate.Drop.Item.Artifact         = 1/Rate.Drop.Item.Artifact         = $conf23/g" -i $server_tc335/etc/world.conf
 
 					conf24=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 					--backtitle $backtitle \
-					--inputbox "\nOpción 31/42\n\nRATES DEL SERVIDOR:\nRates de objetos de misión" 12 51 1 2>&1 >/dev/tty)
+					--inputbox "\nOpción 19/27\n\nRATES DEL SERVIDOR:\nRates de objetos de misión" 12 51 1 2>&1 >/dev/tty)
 					sed -e "s/Rate.Drop.Item.ReferencedAmount = 1/Rate.Drop.Item.ReferencedAmount = $conf24/g" -i $server_tc335/etc/world.conf
 
 					conf25=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 					--backtitle $backtitle \
-					--inputbox "\nOpción 32/42\n\nRATES DEL SERVIDOR:\nRates de dinero" 12 51 1 2>&1 >/dev/tty)
+					--inputbox "\nOpción 20/27\n\nRATES DEL SERVIDOR:\nRates de dinero" 12 51 1 2>&1 >/dev/tty)
 					sed -e "s/Rate.Drop.Money                 = 1/Rate.Drop.Money                 = $conf25/g" -i $server_tc335/etc/world.conf
 
 					conf26=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 					--backtitle $backtitle \
-					--inputbox "\nOpción 33/42\n\nRATES DEL SERVIDOR:\nRates experiencia por muertes" 12 51 1 2>&1 >/dev/tty)
+					--inputbox "\nOpción 21/27\n\nRATES DEL SERVIDOR:\nRates experiencia por muertes" 12 51 1 2>&1 >/dev/tty)
 					sed -e "s/Rate.XP.Kill    = 1/Rate.XP.Kill    = $conf26/g" -i $server_tc335/etc/world.conf
 
 					conf27=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 					--backtitle $backtitle \
-					--inputbox "\nOpción 34/42\n\nRATES DEL SERVIDOR:\nRates experiencia en misiones" 12 51 1 2>&1 >/dev/tty)
+					--inputbox "\nOpción 22/27\n\nRATES DEL SERVIDOR:\nRates experiencia en misiones" 12 51 1 2>&1 >/dev/tty)
 					sed -e "s/Rate.XP.Quest   = 1/Rate.XP.Quest   = $conf27/g" -i $server_tc335/etc/world.conf
 
 					conf28=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 					--backtitle $backtitle \
-					--inputbox "\nOpción 35/42\n\nRATES DEL SERVIDOR:\nRates experiencia por exploración" 12 51 1 2>&1 >/dev/tty)
+					--inputbox "\nOpción 23/27\n\nRATES DEL SERVIDOR:\nRates experiencia por exploración" 12 51 1 2>&1 >/dev/tty)
 					sed -e "s/Rate.XP.Explore = 1/Rate.XP.Explore = $conf28/g" -i $server_tc335/etc/world.conf
 
 					dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 					--backtitle $backtitle \
-					--yesno "\nOpción 36/42\n\n¿Quieres que se anuncie por canal global cuando se anote alguien a BG?\nEsto es útil para cuando hay poca población en el servidor." 12 51
+					--yesno "\nOpción 24/27\n\n¿Quieres que se anuncie por canal global cuando se anote alguien a BG?\nEsto es útil para cuando hay poca población en el servidor." 12 51
 					if [ $? = 0 ]; then
 						sed -e "s/Battleground.QueueAnnouncer.Enable = 0/Battleground.QueueAnnouncer.Enable = 1/g" -i $server_tc335/etc/world.conf
 					fi
@@ -719,21 +719,21 @@ _EOF_
 
 					dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 					--backtitle $backtitle \
-					--yesno "\nOpción 39/42\n\n¿Quieres que se adjudiquen los puntos de arenas automáticamente cada semana? Es recomendable que sí." 12 51
+					--yesno "\nOpción 25/27\n\n¿Quieres que se adjudiquen los puntos de arenas automáticamente cada semana? Es recomendable que sí." 12 51
 					if [ $? = 0 ]; then
 						sed -e "s/Arena.AutoDistributePoints = 0/Arena.AutoDistributePoints = 1/g" -i $server_tc335/etc/world.conf
 					fi
 
 					dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 					--backtitle $backtitle \
-					--yesno "\nOpción 40/42\n\n¿Quieres que se anuncie por canal global cuando se anote un grupo a arenas?\nEsto es útil para cuando hay poca población en el servidor." 12 51
+					--yesno "\nOpción 26/27\n\n¿Quieres que se anuncie por canal global cuando se anote un grupo a arenas?\nEsto es útil para cuando hay poca población en el servidor." 12 51
 					if [ $? = 0 ]; then
 						sed -e "s/Arena.QueueAnnouncer.Enable = 0/Arena.QueueAnnouncer.Enable = 1/g" -i $server_tc335/etc/world.conf
 					fi
 
 					dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 					--backtitle $backtitle \
-					--yesno "\nOpción 41/42\n\n¿Deseas activar el acceso a la máquina por telnet?\nEsto es necesario si quieres tener una tienda de artículos en la web o gestionar el servidor remotamente." 12 51
+					--yesno "\nOpción 27/27\n\n¿Deseas activar el acceso a la máquina por telnet?\nEsto es necesario si quieres tener una tienda de artículos en la web o gestionar el servidor remotamente." 12 51
 					if [ $? = 0 ]; then
 						sed -e "s/Ra.Enable = 0/Ra.Enable = 1/g" -i $server_tc335/etc/world.conf
 					fi
@@ -1113,7 +1113,6 @@ _EOF_
 				opcion224=$(cat ~/var224)
 				rm ~/var224
 				done
-			fi
 
 
 ####################################################################
@@ -1127,12 +1126,312 @@ _EOF_
 				"1 - Configurar authserver.conf" "" \
 				"2 - Configurar worldserver.conf" "" \
 				"3 - Configurar tabla realmlist de la base de datos auth" "" \
-				"0 - Volver" "" 2> var215
+				"0 - Volver" "" 2> var225
 		  
 				opcion225=$(cat var225)
 				rm var225
 
 				while [ "$opcion225" != "0 - Volver" ]; do
+
+
+####################################################################
+# Configurar Authserver.conf
+####################################################################
+				if [ "$opcion225" = "1 - Configurar authserver.conf" ]; then
+					if [ ! -x $server_ac335/etc/authserver.temp  ];then
+						rm -f $server_ac335/etc/authserver.temp
+					fi
+					cp $server_ac335/etc/authserver.conf.dist $server_ac335/etc/authserver.temp
+
+					sed -e "s/LoginDatabaseInfo = \"127\.0\.0\.1;3306;acore;acore;acore_auth\"/LoginDatabaseInfo = \"127\.0\.0\.1;port;sqluser;sqlpass;dbauth\"/g" -i $server_ac335/etc/authserver.temp
+
+					conf=$(dialog --title "CONFIGURACIÓN DEL authserver.conf" \
+					--backtitle $backtitle \
+					--inputbox "\nDirectorio del archivo logs: \nValor por defecto logs" 10 51 logs 2>&1 >/dev/tty)
+					sed -e "s/LogsDir = \"\"/LogsDir = \"\.\.\/$conf\"/g" -i $server_ac335/etc/authserver.temp
+					if [ ! -x $server_ac335/$conf  ];then
+						mkdir $server_ac335/$conf
+					fi
+
+					sed -e "s/port/$port/g" -i $server_ac335/etc/authserver.temp
+
+					sed -e "s/sqluser/$user/g" -i $server_ac335/etc/authserver.temp
+
+					sed -e "s/sqlpass/$pass/g" -i $server_ac335/etc/authserver.temp
+
+					sed -e "s/dbauth/$auth/g" -i $server_ac335/etc/authserver.temp
+
+					# PidFile = "auth.pid" NO TOCAR!!! IMPRESCINDIBLE.
+					sed -e "s/PidFile = \"\"/PidFile = \"authserver.pid\"/g" -i $server_ac335/etc/authserver.temp
+
+					cp $server_ac335/etc/authserver.temp $server_ac335/etc/authserver.conf
+
+					rm -f $server_ac335/etc/authserver.temp
+					dialog --title "INFORMACIÓN" \
+					--backtitle $backtitle \
+					--msgbox "\nEl resto de valores se han configurado automáticamente con los datos que has introducido al arrancar el script. Ya puedes arrancar el servidor de logueo." 10 50
+					clear
+
+
+####################################################################
+# Configurar Worldserver.conf
+####################################################################
+				elif [ "$opcion225" = "2 - Configurar worldserver.conf" ]; then
+					if [ ! -x $server_ac335/etc/world.conf  ];then
+						rm -f $server_ac335/etc/world.conf
+					fi
+					cp $server_ac335/etc/worldserver.conf.dist $server_ac335/etc/world.conf
+					sed -e "s/LoginDatabaseInfo     = \"127\.0\.0\.1;3306;acore;acore;acore_auth\"/LoginDatabaseInfo     = \"127\.0\.0\.1;port;sqluser;sqlpass;dbauth\"/g" -i $server_ac335/etc/world.conf
+					sed -e "s/WorldDatabaseInfo     = \"127\.0\.0\.1;3306;acore;acore;acore_world\"/WorldDatabaseInfo     = \"127\.0\.0\.1;port;sqluser;sqlpass;dbworld\"/g" -i $server_ac335/etc/world.conf
+					sed -e "s/CharacterDatabaseInfo = \"127\.0\.0\.1;3306;acore;acore;acore_characters\"/CharacterDatabaseInfo = \"127\.0\.0\.1;port;sqluser;sqlpass;dbchar\"/g" -i $server_ac335/etc/world.conf
+
+					conf5=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--inputbox "\nOpción 1/29\n\nDirectorio del archivo data: \nValor por defecto data" 12 51 data 2>&1 >/dev/tty)
+					sed -e "s/DataDir = \"\.\"/DataDir = \"\.\.\/$conf5\"/g" -i $server_ac335/etc/world.conf
+
+					conf6=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--inputbox "\nOpción 2/29\n\nDirectorio del archivo logs: \nValor por defecto logs" 12 51 logs 2>&1 >/dev/tty)
+					sed -e "s/LogsDir = \"\"/LogsDir = \"\.\.\/$conf6\"/g" -i $server_ac335/etc/world.conf
+					if [ ! -x $server_ac335/$conf6  ];then
+						mkdir $server_ac335/$conf6
+					fi
+
+					sed -e "s/port/$port/g" -i $server_ac335/etc/world.conf
+
+					sed -e "s/sqluser/$user/g" -i $server_ac335/etc/world.conf
+
+					sed -e "s/sqlpass/$pass/g" -i $server_ac335/etc/world.conf
+
+					sed -e "s/dbauth/$auth/g" -i $server_ac335/etc/world.conf
+
+					sed -e "s/dbworld/$world/g" -i $server_ac335/etc/world.conf
+
+					sed -e "s/dbchar/$char/g" -i $server_ac335/etc/world.conf
+
+					conf7=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--inputbox "\nOpción 3/29\n\nPuerto de conexión al worldserver: \nValor por defecto 8085" 12 51 8085 2>&1 >/dev/tty)
+					sed -e "s/WorldServerPort = 8085/WorldServerPort = $conf7/g" -i $server_ac335/etc/world.conf
+
+					conf8=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--inputbox "\nOpción 4/29\n\nLímite de jugadores conectados simultaneamente.\nSi escribimos 0 no hay límite de conectados.\nValor por defecto 100" 12 51 100 2>&1 >/dev/tty)
+					sed -e "s/PlayerLimit = 0/PlayerLimit = $conf8/g" -i $server_ac335/etc/world.conf
+
+					sed -e "s/MaxCoreStuckTime = 0/MaxCoreStuckTime = 15/g" -i $server_ac335/etc/world.conf
+
+					dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--nocancel \
+					--menu "\nOpción 5/29\n\nTipo de Reino - Quieres un reino PVP o Normal?\nEn los reinos normales se puede desconetar que los de la facción contraria te puedan atacer. En los PVP te pueden atacar menos en los santuarios.\n\n\n\n" 20 80 4 \
+					"1 - Reino PVP" "" \
+					"2 - Reino Normal" "" 2> conf16
+					conf9=$(cat conf16)
+					if [ "$conf9" = "1 - Reino PVP" ]; then
+						sed -e "s/GameType = 0/GameType = 1/g" -i $server_ac335/etc/world.conf
+					else
+						sed -e "s/GameType = 0/GameType = 0/g" -i $server_ac335/etc/world.conf
+					fi
+					rm conf9
+
+					#RESERVADO
+
+					dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--yesno "\nOpción 6/29\n\n¿Quieres que se anuncien por taberna los eventos automáticos?" 12 51
+					if [ $? = 0 ]; then
+						sed -e "s/Event.Announce = 0/Event.Announce = 1/g" -i $server_ac335/etc/world.conf
+					fi
+
+					dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--yesno "\nOpción 7/29\n\n¿Quieres que los Alianzas y los Hordas se puedan comunicar por el canal \"decir\"?" 12 51
+					if [ $? = 0 ]; then
+						sed -e "s/AllowTwoSide.Interaction.Chat = 0/AllowTwoSide.Interaction.Chat = 1/g" -i $server_ac335/etc/world.conf
+					fi
+
+					dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--yesno "\nOpción 8/29\n\n¿Quieres que los Alianzas y los Hordas se puedan comunicar por emociones?" 12 51
+					if [ $? = 0 ]; then
+						sed -e "s/AllowTwoSide.Interaction.Emote = 0/AllowTwoSide.Interaction.Emote = 1/g" -i $server_ac335/etc/world.conf
+					fi
+
+					dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--yesno "\nOpción 9/29\n\n¿Quieres que los Alianzas y los Hordas se puedan comunicar por los canales de chat como taberna?" 12 51
+					if [ $? = 0 ]; then
+						sed -e "s/AllowTwoSide.Interaction.Channel = 0/AllowTwoSide.Interaction.Channel = 1/g" -i $server_ac335/etc/world.conf
+					fi
+
+					dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--yesno "\nOpción 10/29\n\n¿Quieres que se puedan crear grupos mixtos entre Hordas y Alianzas?\nEsto es útil para cuando hay poca población en el servidor poder hacer mazmorras o raids conjuntamente." 12 51
+					if [ $? = 0 ]; then
+						sed -e "s/AllowTwoSide.Interaction.Group = 0/AllowTwoSide.Interaction.Group = 1/g" -i $server_ac335/etc/world.conf
+					fi
+
+					dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--yesno "\nOpción 11/29\n\n¿Quieres que se pueda interactuar en las subastas entre Hordas y Alianzas?\nEsto es útil para cuando hay poca población en el servidor." 12 51
+					if [ $? = 0 ]; then
+						sed -e "s/AllowTwoSide.Interaction.Auction = 0/AllowTwoSide.Interaction.Auction = 1/g" -i $server_ac335/etc/world.conf
+					fi
+
+					dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--yesno "\nOpción 12/29\n\n¿Quieres que se pueda comerciar con la facción contraria?." 12 51
+					if [ $? = 0 ]; then
+						sed -e "s/AllowTwoSide.Trade = 0/AllowTwoSide.Trade = 1/g" -i $server_ac335/etc/world.conf
+					fi
+
+					dialog --title "INFORMACIÓN" \
+					--backtitle $backtitle \
+					--msgbox "\nOpción 13/29\n\nRATES DEL SERVIDOR:\n\nLos rates son lo que determinan lo rápido que se avanza en el juego.\nLos servidores de Blizzard tienen un rate de x1 por lo que si nosotros ponemos rates x3 se multiplican los valores al triple.\nEjemplo: Ponemos rates de experiencia al matar bichos x3. Si al nivel 10 para subir al 11 debemos matar 30 zebras en el de Blizzard, al nuestro con 10 ya sería suficiente." 22 60
+					clear
+
+					conf10=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--inputbox "\nOpción 14/29\n\nRATES DEL SERVIDOR:\nRates de objetos mediocres(grises)" 12 51 1 2>&1 >/dev/tty)
+					sed -e "s/Rate.Drop.Item.Poor             = 1/Rate.Drop.Item.Poor             = $conf10/g" -i $server_ac335/etc/world.conf
+
+					conf11=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--inputbox "\nOpción 15/29\n\nRATES DEL SERVIDOR:\nRates de objetos normales(blancos)" 12 51 1 2>&1 >/dev/tty)
+					sed -e "s/Rate.Drop.Item.Normal           = 1/Rate.Drop.Item.Normal           = $conf11/g" -i $server_ac335/etc/world.conf
+
+					conf12=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--inputbox "\nOpción 16/29\n\nRATES DEL SERVIDOR:\nRates de objetos poco frecuentes(verdes)" 12 51 1 2>&1 >/dev/tty)
+					sed -e "s/Rate.Drop.Item.Uncommon         = 1/Rate.Drop.Item.Uncommon         = $conf12/g" -i $server_ac335/etc/world.conf
+
+					conf13=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--inputbox "\nOpción 17/29\n\nRATES DEL SERVIDOR:\nRates de objetos raros(azules)" 12 51 1 2>&1 >/dev/tty)
+					sed -e "s/Rate.Drop.Item.Rare             = 1/Rate.Drop.Item.Rare             = $conf13/g" -i $server_ac335/etc/world.conf
+
+					conf14=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--inputbox "\nOpción 18/29\n\nRATES DEL SERVIDOR:\nRates de objetos épicos(morados)" 12 51 1 2>&1 >/dev/tty)
+					sed -e "s/Rate.Drop.Item.Epic             = 1/Rate.Drop.Item.Epic             = $conf14/g" -i $server_ac335/etc/world.conf
+
+					conf15=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--inputbox "\nOpción 19/29\n\nRATES DEL SERVIDOR:\nRates de objetos legendarios(anaranjados)" 12 51 1 2>&1 >/dev/tty)
+					sed -e "s/Rate.Drop.Item.Legendary        = 1/Rate.Drop.Item.Legendary        = $conf15/g" -i $server_ac335/etc/world.conf
+
+					conf16=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--inputbox "\nOpción 20/29\n\nRATES DEL SERVIDOR:\nRates de objetos artefactos" 12 51 1 2>&1 >/dev/tty)
+					sed -e "s/Rate.Drop.Item.Artifact         = 1/Rate.Drop.Item.Artifact         = $conf16/g" -i $server_ac335/etc/world.conf
+
+					conf17=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--inputbox "\nOpción 21/29\n\nRATES DEL SERVIDOR:\nRates de objetos de misión" 12 51 1 2>&1 >/dev/tty)
+					sed -e "s/Rate.Drop.Item.ReferencedAmount = 1/Rate.Drop.Item.ReferencedAmount = $conf17/g" -i $server_ac335/etc/world.conf
+
+					conf18=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--inputbox "\nOpción 22/29\n\nRATES DEL SERVIDOR:\nRates de dinero" 12 51 1 2>&1 >/dev/tty)
+					sed -e "s/Rate.Drop.Money                 = 1/Rate.Drop.Money                 = $conf18/g" -i $server_ac335/etc/world.conf
+
+					conf19=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--inputbox "\nOpción 23/29\n\nRATES DEL SERVIDOR:\nRates experiencia por muertes" 12 51 1 2>&1 >/dev/tty)
+					sed -e "s/Rate.XP.Kill    = 1/Rate.XP.Kill    = $conf19/g" -i $server_ac335/etc/world.conf
+
+					conf20=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--inputbox "\nOpción 24/29\n\nRATES DEL SERVIDOR:\nRates experiencia en misiones" 12 51 1 2>&1 >/dev/tty)
+					sed -e "s/Rate.XP.Quest   = 1/Rate.XP.Quest   = $conf20/g" -i $server_ac335/etc/world.conf
+
+					conf21=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--inputbox "\nOpción 25/29\n\nRATES DEL SERVIDOR:\nRates experiencia por exploración" 12 51 1 2>&1 >/dev/tty)
+					sed -e "s/Rate.XP.Explore = 1/Rate.XP.Explore = $conf21/g" -i $server_ac335/etc/world.conf
+
+					dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--yesno "\nOpción 26/29\n\n¿Quieres que se anuncie por canal global cuando se anote alguien a BG?\nEsto es útil para cuando hay poca población en el servidor." 12 51
+					if [ $? = 0 ]; then
+						sed -e "s/Battleground.QueueAnnouncer.Enable = 0/Battleground.QueueAnnouncer.Enable = 1/g" -i $server_ac335/etc/world.conf
+					fi
+
+					# RESERVADO
+
+					dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--yesno "\nOpción 27/29\n\n¿Quieres que se adjudiquen los puntos de arenas automáticamente cada semana? Es recomendable que sí." 12 51
+					if [ $? = 0 ]; then
+						sed -e "s/Arena.AutoDistributePoints = 0/Arena.AutoDistributePoints = 1/g" -i $server_ac335/etc/world.conf
+					fi
+
+					dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--yesno "\nOpción 28/29\n\n¿Quieres que se anuncie por canal global cuando se anote un grupo a arenas?\nEsto es útil para cuando hay poca población en el servidor." 12 51
+					if [ $? = 0 ]; then
+						sed -e "s/Arena.QueueAnnouncer.Enable = 0/Arena.QueueAnnouncer.Enable = 1/g" -i $server_ac335/etc/world.conf
+					fi
+
+					dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+					--backtitle $backtitle \
+					--yesno "\nOpción 29/29\n\n¿Deseas activar el acceso a la máquina por telnet?\nEsto es necesario si quieres tener una tienda de artículos en la web o gestionar el servidor remotamente." 12 51
+					if [ $? = 0 ]; then
+						sed -e "s/Ra.Enable = 0/Ra.Enable = 1/g" -i $server_ac335/etc/world.conf
+					fi
+
+					### Configuraciones que cambiamos automáticamente:
+
+					sed -e "s/Motd = \"Welcome to an AzerothCore server.\"/Motd = \"Bienvenido a nuestro servidor. Esperamos que sea de tu agrado.\"/g" -i $server_ac335/etc/world.conf
+
+					#PidFile = "world.pid"  IMPRESCINDIBLE!!! NO TOCAR.  
+					sed -e "s/PidFile = \"\"/PidFile = \"world.pid\"/g" -i $server_ac335/etc/world.conf
+
+					cp $server_ac335/etc/world.conf $server_ac335/etc/worldserver.conf
+					rm -f $server_ac335/etc/world.conf
+					dialog --title "INFORMACIÓN" \
+					--backtitle $backtitle \
+					--msgbox "\nHas configurado el archivo worldserver.conf.\n\nSi los valores que has introducido son correctos ya puedes arrancar el servidor del juego." 10 50
+					clear
+
+
+####################################################################
+# Configurar tabla realmlist de la base de datos auth
+####################################################################
+				elif [ "$opcion225" = "3 - Configurar tabla realmlist de la base de datos auth" ]; then
+					rm -f $server_tc335/etc/confrealm.sql
+					echo "REPLACE INTO \`realmlist\` (\`id\`,\`name\`,\`address\`,\`localAddress\`,\`port\`,\`icon\`,\`flag\`,\`timezone\`,\`allowedSecurityLevel\`,\`population\`,\`gamebuild\`) VALUES
+(1,'NombreReino','addressReino','127.0.0.1',portReino,1,2,1,0,0,12340);" >> $server_tc335/etc/confrealm.sql
+					
+					conf1=$(dialog --title "CONFIGURACIÓN TABLA realmlist de la DB auth" \
+					--backtitle $backtitle \
+					--inputbox "\nNombre que le quieres dar a tu reino:" 10 51 Trinity 2>&1 >/dev/tty)
+					sed -e "s/NombreReino/$conf1/g" -i $server_tc335/etc/confrealm.sql
+
+					conf2=$(dialog --title "CONFIGURACIÓN TABLA realmlist de la DB auth" \
+					--backtitle $backtitle \
+					--inputbox "\nIp externa de conexión a tu servidor. Si lo ejecutas en local deja el valor predeterminado:" 10 51 127.0.0.1 2>&1 >/dev/tty)
+					sed -e "s/addressReino/$conf2/g" -i $server_tc335/etc/confrealm.sql
+
+					conf3=$(dialog --title "CONFIGURACIÓN TABLA realmlist de la DB auth" \
+					--backtitle $backtitle \
+					--inputbox "\nDirección LAN de tu servidor. IMPRESCINDIBLE:" 10 51 192.168.1.150 2>&1 >/dev/tty)
+					sed -e "s/127.0.0.1/$conf3/g" -i $server_tc335/etc/confrealm.sql
+
+					conf4=$(dialog --title "CONFIGURACIÓN TABLA realmlist de la DB auth" \
+					--backtitle $backtitle \
+					--inputbox "\nPuerto de conexión:" 10 51 8085 2>&1 >/dev/tty)
+					sed -e "s/portReino/$conf4/g" -i $server_tc335/etc/confrealm.sql
+
+					mysql -u${user} -p${pass} --port=${port} $auth < $server_tc335/etc/confrealm.sql
+					rm -f $server_tc335/etc/confrealm.sql
+					dialog --title "INFORMACIÓN" \
+					--backtitle $backtitle \
+					--msgbox "\nYa tienes la Tabla realmlist configurada" 10 50
+					clear
+				fi
 
 
 ########  CONCLUSIÓN MENÚ Configuraciones varias  ########
