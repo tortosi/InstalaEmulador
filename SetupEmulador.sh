@@ -1227,8 +1227,8 @@ _EOF_
 					--nocancel \
 					--menu "\nOpción 5/29\n\nTipo de Reino - Quieres un reino PVP o Normal?\nEn los reinos normales se puede desconetar que los de la facción contraria te puedan atacer. En los PVP te pueden atacar menos en los santuarios.\n\n\n\n" 20 80 4 \
 					"1 - Reino PVP" "" \
-					"2 - Reino Normal" "" 2> conf16
-					conf9=$(cat conf16)
+					"2 - Reino Normal" "" 2> conf9
+					conf9=$(cat conf9)
 					if [ "$conf9" = "1 - Reino PVP" ]; then
 						sed -e "s/GameType = 0/GameType = 1/g" -i $server_ac335/etc/world.conf
 					else
